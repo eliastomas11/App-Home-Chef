@@ -6,8 +6,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.chefgram.R
 import com.example.chefgram.databinding.ActivityMainBinding
 import com.example.chefgram.ui.home.HomeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

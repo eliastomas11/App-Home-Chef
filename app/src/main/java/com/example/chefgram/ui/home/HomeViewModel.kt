@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.MealsRepository
 import com.example.chefgram.domain.model.Meal
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(mealsRepository: MealsRepository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(mealsRepository: MealsRepository) : ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>(true)
     val loading: LiveData<Boolean> get() = _loading
@@ -39,10 +42,10 @@ class HomeViewModel(mealsRepository: MealsRepository) : ViewModel() {
 
 }
 
-@Suppress("UNCHECKED_CAST")
+/*@Suppress("UNCHECKED_CAST")
 class HomeViewModelFactory(private val mealRepository: MealsRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return HomeViewModel(mealRepository) as T
     }
-}
+}*/

@@ -12,22 +12,5 @@ abstract class DatabaseLocal : RoomDatabase() {
 
     abstract fun mealCacheDao(): MealCacheDao
 
-    companion object {
-        private const val DATABASE_NAME = "meals.db"
-
-        @Volatile
-        private var INSTANCE: DatabaseLocal? = null
-
-        fun getInstance(context: Context): DatabaseLocal {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE = Room.databaseBuilder(
-                    context,
-                    DatabaseLocal::class.java,
-                    DATABASE_NAME
-                ).build()
-                INSTANCE!!
-            }
-        }
-    }
 
 }
