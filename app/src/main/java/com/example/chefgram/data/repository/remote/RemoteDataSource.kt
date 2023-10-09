@@ -2,13 +2,10 @@ package com.example.chefgram.data.repository.remote
 
 import com.example.chefgram.common.toMealDto
 import com.example.chefgram.data.mealremotemodel.MealDto
-import com.example.chefgram.data.mealremotemodel.MealResponse
 
-class RemoteDataSource {
+class RemoteDataSource(private val mealService: MealServiceApi) : RemoteSource {
 
-    private val mealService = MealService.mealsService()
-
-    suspend fun getMeals(): List<MealDto> {
+    override suspend fun getMeals(): List<MealDto> {
         return mealService.getMeals().toMealDto()
     }
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.MealsRepository
-import com.example.chefgram.ui.model.Meal
+import com.example.chefgram.domain.model.Meal
 import kotlinx.coroutines.launch
 
 class HomeViewModel(mealsRepository: MealsRepository) : ViewModel() {

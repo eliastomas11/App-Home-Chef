@@ -3,32 +3,37 @@ package com.example.chefgram.data.repository.local
 import com.example.chefgram.common.toMealDto
 import com.example.chefgram.common.toMealEntity
 import com.example.chefgram.data.mealremotemodel.MealDto
-import com.example.chefgram.data.mealremotemodel.MealResponse
+import com.example.chefgram.data.repository.local.db.MealCacheDao
+import com.example.chefgram.data.repository.local.db.MealDao
 
-class LocalDataSource(private val mealDao: MealDao,private val mealCacheDao: MealCacheDao) {
+class LocalDataSource(private val mealDao: MealDao, private val mealCacheDao: MealCacheDao): LocalSource {
 
-    fun getMeals(): List<MealDto> {
+    override suspend fun getMeals(): List<MealDto> {
         return mealCacheDao.getMeals().map { it.toMealDto() }
     }
 
-    fun saveMeals(mealsDto: List<MealDto>): Boolean {
+    override suspend fun saveMeals(mealsDto: List<MealDto>): Boolean {
         return mealCacheDao.saveMeals(mealsDto.map { it.toMealEntity() })
     }
 
-    fun saveToFavorites(meal: MealDto): Boolean {
+    override suspend fun saveToFavorites(meal: MealDto): Boolean {
         return mealDao.saveToFavorites(meal.toMealEntity())
     }
 
-    fun getFavorites(): List<MealDto> {
+    override suspend fun getFavorites(): List<MealDto> {
         return mealDao.getFavorites().map { it.toMealDto() }
     }
 
-    fun deleteFromFavorites(meal: MealDto): Boolean {
+    override suspend fun deleteFromFavorites(meal: MealDto): Boolean {
         return mealDao.deleteFromFavorites(meal.toMealEntity())
     }
 
-    fun clearCache(): Boolean {
+    override suspend fun clearCache(): Boolean {
         return mealCacheDao.clearCache()
+    }
+
+    override suspend fun getMealById(id: Int): MealDto? {
+        return mealCacheDao.getMealById(id).toMealDto()
     }
 
 

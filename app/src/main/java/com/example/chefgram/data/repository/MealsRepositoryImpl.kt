@@ -1,6 +1,6 @@
 package com.example.chefgram.data.repository
 
-import com.example.chefgram.ui.model.Meal
+import com.example.chefgram.domain.model.Meal
 import com.example.chefgram.common.toMeal
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.remote.RemoteDataSource

@@ -5,12 +5,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chefgram.R
 import com.example.chefgram.data.repository.MealsRepositoryImpl
-import com.example.chefgram.data.repository.local.FakeMealCacheDao
-import com.example.chefgram.data.repository.local.FakeMealDao
+import com.example.chefgram.data.repository.local.db.FakeMealCacheDao
+import com.example.chefgram.data.repository.local.db.FakeMealDao
 import com.example.chefgram.data.repository.local.LocalDataSource
+import com.example.chefgram.data.repository.local.db.DatabaseLocal
+import com.example.chefgram.data.repository.remote.MealService
 import com.example.chefgram.data.repository.remote.RemoteDataSource
 import com.example.chefgram.databinding.HomeFragmentBinding
 import kotlinx.coroutines.Dispatchers
@@ -18,19 +21,20 @@ import kotlinx.coroutines.Dispatchers
 class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private lateinit var binding: HomeFragmentBinding
+    private val navController by lazy { findNavController() }
+    private val database = DatabaseLocal.getInstance(requireActivity().applicationContext)
     private val adapter: MealsAdapter = MealsAdapter(){
-        Toast.makeText(requireActivity(), "Clicked", Toast.LENGTH_SHORT).show()
+        navController.navigate(R.id.action_homeFragment_to_detailScreen)
     }
     private val viewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(
             MealsRepositoryImpl(
                 Dispatchers.IO,
-                LocalDataSource(FakeMealDao(), FakeMealCacheDao()),
-                RemoteDataSource()
+                LocalDataSource(database.mealDao(), database.mealCacheDao()),
+                RemoteDataSource(MealService.mealsService())
             )
         )
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)

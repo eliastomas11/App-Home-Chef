@@ -7,7 +7,7 @@ import androidx.core.graphics.BitmapCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
-import com.example.chefgram.ui.model.Meal
+import com.example.chefgram.domain.model.Meal
 
 class MealsAdapter(private val action: () -> Unit) :
     RecyclerView.Adapter<MealsAdapter.MealsViewHolder>() {
@@ -44,10 +44,10 @@ class MealsAdapter(private val action: () -> Unit) :
             mealsItem.mealDescriptionTv.text = description
             Glide.with(mealsItem.root.context.applicationContext)
                 .load(imageUrl)
-                .error(mealsItem.imageView.drawable)
+                .error(mealsItem.detailImageIv.drawable)
                 .encodeFormat(Bitmap.CompressFormat.JPEG)
                 .encodeQuality(80)
-                .into(mealsItem.imageView)
+                .into(mealsItem.detailImageIv)
             mealsItem.root.setOnClickListener { action() }
         }
     }

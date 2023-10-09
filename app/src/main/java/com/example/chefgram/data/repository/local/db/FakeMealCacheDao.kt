@@ -1,4 +1,6 @@
-package com.example.chefgram.data.repository.local
+package com.example.chefgram.data.repository.local.db
+
+import com.example.chefgram.data.repository.local.MealEntity
 
 class FakeMealCacheDao: MealCacheDao {
     override fun getMeals(): List<MealEntity> {
@@ -11,5 +13,9 @@ class FakeMealCacheDao: MealCacheDao {
 
     override fun clearCache(): Boolean {
         return true
+    }
+
+    override fun getMealById(id: Int): MealEntity {
+        TODO()
     }
 }
