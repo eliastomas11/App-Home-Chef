@@ -1,6 +1,5 @@
 package com.example.chefgram.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -67,6 +66,43 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
             }
 
         }
+    }
+
+    fun filterByIngredients(filterParams: FilterParams) {
+        if (filterParams.exclusive) {
+            //Excluyente
+            val exclusiveList = mutableSetOf<Meal>()
+            _mealsList.value!!.filterTo(exclusiveList) {
+                it.ingredients.containsAll(filterParams.ingredient)
+            }
+            _mealsList.value = exclusiveList.toList()
+        } else {
+            //Incluyente
+            val abarcativeList = mutableSetOf<Meal>()
+            for (ingredient in filterParams.ingredient) {
+                _mealsList.value!!.filterTo(abarcativeList) {
+                    it.ingredients.contains(ingredient)
+                }
+            }
+            _mealsList.value = abarcativeList.toList()
+        }
+
+        fun filterByFavorites(): List<Meal> {
+            viewModelScope.launch {
+                return@launch _mealsList.value = mealsRepository.getFavorites()
+            }
+        }
+
+        //version 2
+        /*for(ingredient in filterParams.ingredient){
+            for(recipe in _mealsList.value!!){
+                for(recipeIngredient in recipe.ingredients){
+                    if(recipeIngredient.name == ingredient.name){
+                        newList.add(recipe)
+                    }
+                }
+            }
+        }*/
     }
 
 }

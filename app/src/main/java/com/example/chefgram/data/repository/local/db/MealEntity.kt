@@ -2,6 +2,7 @@ package com.example.chefgram.data.repository.local.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.chefgram.data.mealremotemodel.Ingredient
 
 @Entity
 data class MealEntity(
@@ -10,6 +11,7 @@ data class MealEntity(
     val description: String,
     val thumbnail_url: String,
     val country: String = "",
-    val num_servings: Int = 0 ,
+    val num_servings: Int = 0,
     val cook_time_minutes: Int = 0,
+    val ingredients: List<Ingredient>,
 )

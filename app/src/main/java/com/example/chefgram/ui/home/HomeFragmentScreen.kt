@@ -13,7 +13,7 @@ import com.example.chefgram.ui.main.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.home_fragment) {
+class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
     private lateinit var binding: HomeFragmentBinding
     private val navController by lazy { findNavController() }

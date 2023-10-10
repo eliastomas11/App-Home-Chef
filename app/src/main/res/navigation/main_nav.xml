@@ -10,7 +10,7 @@
         android:label="DetailScreen" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.chefgram.ui.home.HomeFragment"
+        android:name="com.example.chefgram.ui.home.HomeFragmentScreen"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_detailScreen"

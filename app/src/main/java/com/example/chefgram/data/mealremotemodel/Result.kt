@@ -8,4 +8,5 @@ data class Result(
     val name: String?,
     val num_servings: Int?,
     val thumbnail_url: String?,
+    val ingredient: List<Ingredient>?
 )

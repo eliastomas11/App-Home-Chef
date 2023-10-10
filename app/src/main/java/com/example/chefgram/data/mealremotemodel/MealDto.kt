@@ -8,4 +8,5 @@ data class MealDto(
     val country: String?,
     val num_servings: Int? = 0 ,
     val cook_time_minutes: Int? = 0,
+    val ingredient: List<Ingredient>?
 )
