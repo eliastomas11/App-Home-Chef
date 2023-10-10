@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
 import com.example.chefgram.domain.model.Meal
 
-class MealsAdapter(private val action: () -> Unit) :
+class MealsAdapter(private val action: (id: Int) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.MealsViewHolder>() {
 
     private var mealsList: List<Meal> = emptyList()
@@ -27,7 +27,8 @@ class MealsAdapter(private val action: () -> Unit) :
         holder.bind(
             mealsList[position].title,
             mealsList[position].description,
-            mealsList[position].image
+            mealsList[position].image,
+            mealsList[position].id
         )
 
     }
@@ -39,7 +40,7 @@ class MealsAdapter(private val action: () -> Unit) :
     inner class MealsViewHolder(private val mealsItem: MealsRecyclerItemBinding) :
         RecyclerView.ViewHolder(mealsItem.root) {
 
-        fun bind(name: String, description: String, imageUrl: String) {
+        fun bind(name: String, description: String, imageUrl: String,id: Int) {
             mealsItem.mealTitleTv.text = name
             mealsItem.mealDescriptionTv.text = description
             Glide.with(mealsItem.root.context.applicationContext)
@@ -48,7 +49,7 @@ class MealsAdapter(private val action: () -> Unit) :
                 .encodeFormat(Bitmap.CompressFormat.JPEG)
                 .encodeQuality(80)
                 .into(mealsItem.detailImageIv)
-            mealsItem.root.setOnClickListener { action() }
+            mealsItem.root.setOnClickListener { action(id) }
         }
     }
 

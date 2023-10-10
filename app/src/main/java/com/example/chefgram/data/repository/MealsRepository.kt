@@ -4,4 +4,6 @@ import com.example.chefgram.domain.model.Meal
 
 interface MealsRepository {
     suspend fun fetchMeals(): List<Meal>
+    suspend fun getMealById(id: Int): Meal
+    suspend fun saveMeal(recipe: Meal?): Long
 }

@@ -1,4 +1,4 @@
-package com.example.chefgram.data.repository.local
+package com.example.chefgram.data.repository.local.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

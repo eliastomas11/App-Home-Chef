@@ -4,25 +4,24 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chefgram.R
-import com.example.chefgram.data.repository.MealsRepository
-import com.example.chefgram.data.repository.MealsRepositoryImpl
 import com.example.chefgram.databinding.HomeFragmentBinding
+import com.example.chefgram.ui.main.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private lateinit var binding: HomeFragmentBinding
     private val navController by lazy { findNavController() }
-    private val adapter: MealsAdapter = MealsAdapter() {
+    private val adapter: MealsAdapter = MealsAdapter { selectedItem ->
         navController.navigate(R.id.action_homeFragment_to_detailScreen)
+        viewModel.onMealClick(selectedItem)
     }
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)

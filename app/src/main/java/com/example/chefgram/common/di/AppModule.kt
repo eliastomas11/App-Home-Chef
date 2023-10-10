@@ -1,5 +1,6 @@
 package com.example.chefgram.common.di
 
+import android.content.Context
 import androidx.room.Room
 import com.example.chefgram.data.repository.MealsRepository
 import com.example.chefgram.data.repository.MealsRepositoryImpl
@@ -13,6 +14,7 @@ import com.example.chefgram.data.repository.remote.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -22,28 +24,34 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+object AppModule {
 
     @Provides
     @Singleton
-    fun provideMealService(): MealServiceApi {
+    fun provideRetrofit(): Retrofit {
         val url = "https://tasty.p.rapidapi.com/"
         return Retrofit.Builder()
             .baseUrl(url)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
-            .create(MealServiceApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideDb(application: MyApplication): DatabaseLocal {
-        val DATABASE_NAME = "meals.db"
+    fun provideMealService(retrofit: Retrofit): MealServiceApi {
+        return retrofit.create(MealServiceApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDb(@ApplicationContext context: Context): DatabaseLocal {
         return Room.databaseBuilder(
-            application,
+            context,
             DatabaseLocal::class.java,
-            DATABASE_NAME
-        ).build()
+            "meals.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -60,13 +68,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(mealDao: MealDao,mealCacheDao: MealCacheDao): LocalSource {
-        return LocalDataSource(mealDao,mealCacheDao)
+    fun provideLocalDataSource(mealDao: MealDao, mealCacheDao: MealCacheDao): LocalSource {
+        return LocalDataSource(mealDao, mealCacheDao)
     }
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(mealServiceApi: MealServiceApi) : RemoteDataSource{
+    fun provideRemoteDataSource(mealServiceApi: MealServiceApi): RemoteDataSource {
         return RemoteDataSource(mealServiceApi)
     }
 
@@ -75,10 +83,15 @@ class AppModule {
     fun provideCoroutineDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
+
     @Provides
     @Singleton
-    fun provideMealRepository(coroutineDispatcher: CoroutineDispatcher,localDataSource: LocalDataSource,remoteDataSource: RemoteDataSource) : MealsRepository{
-        return MealsRepositoryImpl(coroutineDispatcher,localDataSource,remoteDataSource)
+    fun provideMealRepository(
+        coroutineDispatcher: CoroutineDispatcher,
+        localDataSource: LocalDataSource,
+        remoteDataSource: RemoteDataSource
+    ): MealsRepository {
+        return MealsRepositoryImpl(coroutineDispatcher, localDataSource, remoteDataSource)
     }
 
 

@@ -1,14 +1,15 @@
 package com.example.chefgram.data.repository
 
-import com.example.chefgram.domain.model.Meal
 import com.example.chefgram.common.toMeal
+import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.remote.RemoteDataSource
+import com.example.chefgram.domain.model.Meal
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.lang.RuntimeException
+import javax.inject.Inject
 
-class MealsRepositoryImpl(
+class MealsRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
@@ -18,11 +19,24 @@ class MealsRepositoryImpl(
         //throw RuntimeException("Not implemented")
         return withContext(dispatcher) {
             var mealsDto = localDataSource.getMeals()
-            if(mealsDto.isEmpty()){
+            if (mealsDto.isEmpty()) {
                 mealsDto = remoteDataSource.getMeals()
                 localDataSource.saveMeals(mealsDto)
             }
             return@withContext mealsDto.map { it.toMeal() }
+        }
+    }
+
+    override suspend fun getMealById(id: Int): Meal {
+        return withContext(dispatcher) {
+            val meal = localDataSource.getMealById(id) ?: throw RuntimeException("Meal not found")
+            return@withContext meal.toMeal()
+        }
+    }
+
+    override suspend fun saveMeal(recipe: Meal?): Long {
+        return withContext(dispatcher) {
+            return@withContext localDataSource.saveToFavorites(recipe!!.toRecipeDto())
         }
     }
 
