@@ -3,16 +3,15 @@ package com.example.chefgram.ui.home
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.BitmapCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
-import com.example.chefgram.domain.model.Meal
+import com.example.chefgram.domain.model.Recipe
 
 class MealsAdapter(private val action: (id: Int) -> Unit) :
     RecyclerView.Adapter<MealsAdapter.MealsViewHolder>() {
 
-    private var mealsList: List<Meal> = emptyList()
+    private var mealsList: List<Recipe> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -33,8 +32,8 @@ class MealsAdapter(private val action: (id: Int) -> Unit) :
 
     }
 
-    fun setData(mealList: List<Meal>?) {
-        mealsList = mealList ?: emptyList()
+    fun setData(recipeList: List<Recipe>?) {
+        mealsList = recipeList ?: emptyList()
     }
 
     inner class MealsViewHolder(private val mealsItem: MealsRecyclerItemBinding) :

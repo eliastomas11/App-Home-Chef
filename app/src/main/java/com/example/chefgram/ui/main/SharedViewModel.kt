@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.MealsRepository
-import com.example.chefgram.domain.model.Meal
+import com.example.chefgram.domain.model.Recipe
+import com.example.chefgram.domain.model.RecipeIngredient
+import com.example.chefgram.ui.home.FilterItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,22 +16,28 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepository) :
     ViewModel() {
 
+    private val _ingredientList = MutableLiveData<List<FilterItem>>()
+    val ingredientList: LiveData<List<FilterItem>> get() = _ingredientList
     private val _loading = MutableLiveData<Boolean>(true)
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _mealsList = MutableLiveData<List<Meal>>()
-    val mealsList: LiveData<List<Meal>> get() = _mealsList
+    private val _mealsList = MutableLiveData<List<Recipe>>()
+    val mealsList: LiveData<List<Recipe>> get() = _mealsList
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
-    private val _mealSelected = MutableLiveData<Meal>()
-    val mealSelected: LiveData<Meal> get() = _mealSelected
+    private val _recipeSelected = MutableLiveData<Recipe>()
+    val recipeSelected: LiveData<Recipe> get() = _recipeSelected
 
     private val _isSaved = MutableLiveData<Boolean>(false)
     val isSaved: LiveData<Boolean> get() = _isSaved
 
     init {
+        fetchMeals()
+    }
+
+    private fun fetchMeals() {
         viewModelScope.launch {
             try {
                 _mealsList.value = mealsRepository.fetchMeals()
@@ -45,7 +53,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         _loading.value = true
         try {
             viewModelScope.launch {
-                _mealSelected.value = mealsRepository.getMealById(id)
+                _recipeSelected.value = mealsRepository.getMealById(id)
             }
         } catch (e: Exception) {
             _errorMessage.value = e.message
@@ -56,10 +64,10 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
     fun saveMeal() {
         viewModelScope.launch {
             try {
-                if (_mealSelected.value?.isSaved == false) {
-                    val saved = mealsRepository.saveMeal(_mealSelected.value)
+                if (_recipeSelected.value?.isSaved == false) {
+                    val saved = mealsRepository.saveMeal(_recipeSelected.value)
                     _isSaved.value = saved > 0
-                    _mealSelected.value = _mealSelected.value!!.copy(isSaved = _isSaved.value!!)
+                    _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = _isSaved.value!!)
                 }
             } catch (e: Exception) {
                 _errorMessage.value = e.message
@@ -68,30 +76,32 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         }
     }
 
+    private fun filterExclsuive(filterIngredients: List<RecipeIngredient>) {
+        val exclusiveList = mutableSetOf<Recipe>()
+        _mealsList.value!!.filterTo(exclusiveList) {
+            it.ingredients.containsAll(filterIngredients)
+        }
+        _mealsList.value = exclusiveList.toList()
+    }
+
+    private fun filterInclusive(filterIngredients: List<RecipeIngredient>) {
+        val abarcativeList = mutableSetOf<Recipe>()
+        for (ingredient in filterIngredients) {
+            _mealsList.value!!.filterTo(abarcativeList) {
+                it.ingredients.contains(ingredient)
+            }
+        }
+        _mealsList.value = abarcativeList.toList()
+    }
+
     fun filterByIngredients(filterParams: FilterParams) {
         if (filterParams.exclusive) {
-            //Excluyente
-            val exclusiveList = mutableSetOf<Meal>()
-            _mealsList.value!!.filterTo(exclusiveList) {
-                it.ingredients.containsAll(filterParams.ingredient)
-            }
-            _mealsList.value = exclusiveList.toList()
+            filterExclsuive(filterParams.ingredient)
         } else {
-            //Incluyente
-            val abarcativeList = mutableSetOf<Meal>()
-            for (ingredient in filterParams.ingredient) {
-                _mealsList.value!!.filterTo(abarcativeList) {
-                    it.ingredients.contains(ingredient)
-                }
-            }
-            _mealsList.value = abarcativeList.toList()
+            filterInclusive(filterParams.ingredient)
+
         }
 
-        fun filterByFavorites(): List<Meal> {
-            viewModelScope.launch {
-                return@launch _mealsList.value = mealsRepository.getFavorites()
-            }
-        }
 
         //version 2
         /*for(ingredient in filterParams.ingredient){
@@ -104,6 +114,11 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
             }
         }*/
     }
+
+    fun onFilterClick() {
+
+    }
+
 
 }
 

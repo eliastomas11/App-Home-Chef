@@ -4,7 +4,7 @@ import com.example.chefgram.data.mealremotemodel.MealDto
 import com.example.chefgram.data.mealremotemodel.MealResponse
 import com.example.chefgram.data.repository.local.db.MealEntity
 import com.example.chefgram.data.repository.local.db.FavoriteRecipeEntity
-import com.example.chefgram.domain.model.Meal
+import com.example.chefgram.domain.model.Recipe
 
 fun MealResponse.toMealDto(): List<MealDto> = this.results.map {
     MealDto(
@@ -14,23 +14,25 @@ fun MealResponse.toMealDto(): List<MealDto> = this.results.map {
         it.thumbnail_url,
         it.country,
         it.num_servings,
-        it.cook_time_minutes,
-        it.ingredient
+        it.cook_time_minutes
+        //it.ingredient
     )
 }
 
-fun MealDto.toMeal(): Meal = Meal(
+fun MealDto.toMeal(): Recipe = Recipe(
     this.id,
     this.name ?: "",
     this.description ?: "",
     this.thumbnail_url ?: "",
     this.country ?: "",
     this.num_servings ?: 0,
-    this.cook_time_minutes ?: 0
+    this.cook_time_minutes ?: 0,
+    emptyList()
 )
 
 fun MealDto.toMealEntity(): MealEntity =
-    MealEntity(this.id, this.name!!, this.description!!, this.thumbnail_url!!,this.country?:"",this.num_servings?:0,this.cook_time_minutes?:0,this.ingredient?: emptyList())
+    MealEntity(this.id, this.name!!, this.description!!, this.thumbnail_url!!,this.country?:"",this.num_servings?:0,this.cook_time_minutes?:0//,this.ingredient?: emptyList())
+    )
 
 fun MealEntity.toMealDto(): MealDto = MealDto(
     this.id,
@@ -40,10 +42,10 @@ fun MealEntity.toMealDto(): MealDto = MealDto(
     this.country,
     this.num_servings,
     this.cook_time_minutes,
-    this.ingredients
+    //this.ingredients
 )
 
-fun Meal.toRecipeDto(): MealDto = MealDto(
+fun Recipe.toRecipeDto(): MealDto = MealDto(
     this.id,
     this.title,
     this.description,
@@ -51,7 +53,7 @@ fun Meal.toRecipeDto(): MealDto = MealDto(
     this.country,
     this.num_servings,
     this.cook_time_minutes,
-    emptyList()
+    //emptyList()
 )
 
 fun MealDto.toFavoriteRecipeEntity(): FavoriteRecipeEntity = FavoriteRecipeEntity(
@@ -66,5 +68,5 @@ fun MealDto.toFavoriteRecipeEntity(): FavoriteRecipeEntity = FavoriteRecipeEntit
 
 fun FavoriteRecipeEntity.toMealDto(): MealDto = MealDto(
     this.id, this.name, this.description,
-    this.thumbnail_url, this.country, this.num_servings, this.cook_time_minutes, emptyList()
+    this.thumbnail_url, this.country, this.num_servings, this.cook_time_minutes//, emptyList()
 )

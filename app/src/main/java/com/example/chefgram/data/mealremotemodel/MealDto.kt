@@ -7,6 +7,6 @@ data class MealDto(
     val thumbnail_url: String?,
     val country: String?,
     val num_servings: Int? = 0 ,
-    val cook_time_minutes: Int? = 0,
-    val ingredient: List<Ingredient>?
+    val cook_time_minutes: Int? = 0
+    //val ingredient: List<Ingredient>?
 )

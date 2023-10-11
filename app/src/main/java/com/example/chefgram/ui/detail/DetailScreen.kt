@@ -33,13 +33,13 @@ class DetailScreen : Fragment() {
     }
 
     private fun initUI() {
-        viewModel.mealSelected.observe(viewLifecycleOwner) {
+        viewModel.recipeSelected.observe(viewLifecycleOwner) {
             Glide.with(this).load(it.image).into(binding.detailImageIv)
             binding.detailTitleTv.text = it.title
-            binding.deetailDescriptionTv.text = it.description
+            binding.detailDescriptionTv.text = it.description
         }
 
-        binding.saveFabButton.setOnClickListener {
+        binding.detailSaveFabButton.setOnClickListener {
             viewModel.saveMeal()
             viewModel.isSaved.observe(viewLifecycleOwner) {
                 Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show()

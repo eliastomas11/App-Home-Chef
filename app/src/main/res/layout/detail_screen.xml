@@ -32,7 +32,7 @@
         />
 
     <TextView
-        android:id="@+id/deetail_description_tv"
+        android:id="@+id/detail_description_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Texto"
@@ -46,13 +46,13 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/save_fab_button"
+        android:id="@+id/detail_save_fab_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        android:contentDescription="Save Recipe to Fvorites" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

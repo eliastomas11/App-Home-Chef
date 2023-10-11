@@ -2,6 +2,7 @@ package com.example.chefgram.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,7 +23,6 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
         viewModel.onMealClick(selectedItem)
     }
     private val viewModel: SharedViewModel by activityViewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)
         initUI()
@@ -36,16 +36,17 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     }
 
 
+
     private fun initRecycler() {
-        binding.mealsRecyclerView.layoutManager =
+        binding.recipeHomeRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
-        binding.mealsRecyclerView.adapter = adapter
+        binding.recipeHomeRecyclerView.adapter = adapter
     }
 
     private fun initObservers() {
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            binding.loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingHomeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 
         }
 
@@ -57,10 +58,13 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
             adapter.setData(mealList)
             adapter.notifyDataSetChanged()
         }
+
     }
 
     private fun initListeners() {
-
+        binding.filterButton.setOnClickListener {
+            viewModel.onFilterClick()
+        }
     }
 
 }
