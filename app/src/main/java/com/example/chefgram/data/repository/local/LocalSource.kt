@@ -1,23 +1,23 @@
 package com.example.chefgram.data.repository.local
 
-import com.example.chefgram.data.mealremotemodel.MealDto
+import com.example.chefgram.data.mealremotemodel.RecipeDto
 
 interface LocalSource {
 
-    suspend fun getMeals(): List<MealDto>
+    suspend fun getMeals(): List<RecipeDto>
 
 
-    suspend fun saveMeals(mealsDto: List<MealDto>)
+    suspend fun saveMeals(mealsDto: List<RecipeDto>)
 
 
-    suspend fun saveToFavorites(meal: MealDto): Long
+    suspend fun saveToFavorites(meal: RecipeDto): Long
 
 
-    suspend fun getFavorites(): List<MealDto>
+    suspend fun getFavorites(): List<RecipeDto>
 
-    suspend fun deleteFromFavorites(meal: MealDto)
+    suspend fun deleteFromFavorites(meal: RecipeDto)
 
     suspend fun clearCache()
 
-    suspend fun getMealById(id: Int): MealDto?
+    suspend fun getMealById(id: Int): RecipeDto?
 }

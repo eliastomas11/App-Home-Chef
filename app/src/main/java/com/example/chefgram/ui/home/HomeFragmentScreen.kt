@@ -2,7 +2,6 @@ package com.example.chefgram.ui.home
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,7 +17,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
     private lateinit var binding: HomeFragmentBinding
     private val navController by lazy { findNavController() }
-    private val adapter: MealsAdapter = MealsAdapter { selectedItem ->
+    private val adapter: RecipeAdapter = RecipeAdapter { selectedItem ->
         navController.navigate(R.id.action_homeFragment_to_detailScreen)
         viewModel.onMealClick(selectedItem)
     }

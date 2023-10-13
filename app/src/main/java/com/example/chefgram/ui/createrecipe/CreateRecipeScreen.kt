@@ -36,8 +36,9 @@ class CreateRecipeScreen : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.errorSavingRecipe.observe(viewLifecycleOwner){
+        viewModel.errorEmptyFields.observe(viewLifecycleOwner){ isError ->
             //Cada texto en vacio deberia mostrar el error
+            //
         }
     }
 

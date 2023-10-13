@@ -15,8 +15,8 @@ import javax.inject.Inject
 class CreateRecipeViewModel @Inject constructor(private val repository: MealsRepository) :
     ViewModel() {
 
-    private val _errorSavingRecipe = MutableLiveData<String>()
-    val errorSavingRecipe: LiveData<String> get() = _errorSavingRecipe
+    private val _errorEmptyFields = MutableLiveData<Boolean>(false)
+    val errorEmptyFields: LiveData<Boolean> get() = _errorEmptyFields
     fun saveRecipe(recipeComponentes: List<String>) {
         val userRecipe = createRecipe(recipeComponentes)
 
@@ -25,7 +25,8 @@ class CreateRecipeViewModel @Inject constructor(private val repository: MealsRep
                 repository.createRecipe(userRecipe.toRecipeDto())
             }
         }else{
-            _errorSavingRecipe.value = "Error al crear la receta" //Setear boolean para set error de los text input fields que tiene que observar
+            //Setear boolean para set error de los text input fields que tiene que observar
+            _errorEmptyFields.value = true
         }
     }
 

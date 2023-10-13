@@ -1,9 +1,7 @@
 package com.example.chefgram.data.repository.local.db
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.example.chefgram.data.mealremotemodel.Ingredient
 
 @Entity
 data class MealEntity(

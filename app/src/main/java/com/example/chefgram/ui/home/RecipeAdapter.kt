@@ -8,8 +8,8 @@ import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
 import com.example.chefgram.domain.model.Recipe
 
-class MealsAdapter(private val action: (id: Int) -> Unit) :
-    RecyclerView.Adapter<MealsAdapter.MealsViewHolder>() {
+class RecipeAdapter(private val action: (id: Int) -> Unit) :
+    RecyclerView.Adapter<RecipeAdapter.MealsViewHolder>() {
 
     private var mealsList: List<Recipe> = emptyList()
 

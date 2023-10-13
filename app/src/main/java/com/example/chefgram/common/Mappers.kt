@@ -1,10 +1,10 @@
 package com.example.chefgram.common
 
 import com.example.chefgram.data.mealremotemodel.MealDto
-import com.example.chefgram.data.mealremotemodel.MealResponse
 import com.example.chefgram.data.repository.local.db.MealEntity
 import com.example.chefgram.data.repository.local.db.FavoriteRecipeEntity
 import com.example.chefgram.domain.model.Recipe
+import retrofit2.Response
 
 fun MealResponse.toMealDto(): List<MealDto> = this.results.map {
     MealDto(
@@ -70,3 +70,5 @@ fun FavoriteRecipeEntity.toMealDto(): MealDto = MealDto(
     this.id, this.name, this.description,
     this.thumbnail_url, this.country, this.num_servings, this.cook_time_minutes//, emptyList()
 )
+
+fun Response<MealResponse>.toMealDto(): List<MealDto> = this.body()?.results?.map { MealDto(it.id, it.name, it.description,it.thumbnail_url, it.cook_time_minutes, it.ingredients, it.country, it.createdBy) } ?: emptyList()

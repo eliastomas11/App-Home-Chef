@@ -2,7 +2,7 @@ package com.example.chefgram.data.repository
 
 import com.example.chefgram.common.toMeal
 import com.example.chefgram.common.toRecipeDto
-import com.example.chefgram.data.mealremotemodel.MealDto
+import com.example.chefgram.data.mealremotemodel.RecipeDto
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.remote.RemoteDataSource
 import com.example.chefgram.domain.model.Recipe
@@ -16,6 +16,7 @@ class MealsRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : MealsRepository {
 
+
     override suspend fun fetchMeals(): List<Recipe> {
         //throw RuntimeException("Not implemented")
         return withContext(dispatcher) {
@@ -26,7 +27,6 @@ class MealsRepositoryImpl @Inject constructor(
             }
             return@withContext mealsDto.map { it.toMeal() }
         }
-
     }
 
     override suspend fun getMealById(id: Int): Recipe {
@@ -42,18 +42,16 @@ class MealsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getFavorites(): List<Recipe> {
-        return emptyList()
-    }
-
     override suspend fun getFavoriteRecipes(): List<Recipe> {
         return withContext(dispatcher) {
             localDataSource.getFavorites().map { it.toMeal() }
         }
     }
 
-    override suspend fun createRecipe(recipeDto: MealDto): Long {
-        return localDataSource.saveToFavorites(recipeDto)
+    override suspend fun createRecipe(recipeDto: RecipeDto): Long {
+        return withContext(dispatcher) {
+            return@withContext localDataSource.saveToFavorites(recipeDto)
+        }
     }
 
 }

@@ -41,8 +41,8 @@ class DetailScreen : Fragment() {
 
         binding.detailSaveFabButton.setOnClickListener {
             viewModel.saveMeal()
-            viewModel.isSaved.observe(viewLifecycleOwner) {
-                Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show()
+            viewModel.isSavedMessage.observe(viewLifecycleOwner) {message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }

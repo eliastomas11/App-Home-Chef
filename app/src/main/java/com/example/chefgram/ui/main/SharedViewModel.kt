@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.MealsRepository
+import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
 import com.example.chefgram.ui.home.FilterItem
@@ -30,8 +31,8 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
     private val _recipeSelected = MutableLiveData<Recipe>()
     val recipeSelected: LiveData<Recipe> get() = _recipeSelected
 
-    private val _isSaved = MutableLiveData<Boolean>(false)
-    val isSaved: LiveData<Boolean> get() = _isSaved
+    private val _isSavedMessage = MutableLiveData<String>("")
+    val isSavedMessage: LiveData<String> get() = _isSavedMessage
 
     init {
         fetchMeals()
@@ -66,8 +67,10 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
             try {
                 if (_recipeSelected.value?.isSaved == false) {
                     val saved = mealsRepository.saveMeal(_recipeSelected.value)
-                    _isSaved.value = saved > 0
-                    _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = _isSaved.value!!)
+                    _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
+                    _isSavedMessage.value = "Saved"
+                }else{
+                    _isSavedMessage.value = "Already Saved"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = e.message

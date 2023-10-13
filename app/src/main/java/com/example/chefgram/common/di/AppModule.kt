@@ -10,6 +10,7 @@ import com.example.chefgram.data.repository.local.db.DatabaseLocal
 import com.example.chefgram.data.repository.local.db.MealCacheDao
 import com.example.chefgram.data.repository.local.db.MealDao
 import com.example.chefgram.data.repository.remote.MealServiceApi
+import com.example.chefgram.data.repository.remote.RecipeInterceptor
 import com.example.chefgram.data.repository.remote.RemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -18,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -28,11 +30,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
-        val url = "https://tasty.p.rapidapi.com/"
+    fun provideHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(RecipeInterceptor()).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(httpClient: OkHttpClient): Retrofit {
+        val url = "https://api.spoonacular.com/"
         return Retrofit.Builder()
             .baseUrl(url)
             .addConverterFactory(MoshiConverterFactory.create())
+            .client(httpClient)
             .build()
     }
 
