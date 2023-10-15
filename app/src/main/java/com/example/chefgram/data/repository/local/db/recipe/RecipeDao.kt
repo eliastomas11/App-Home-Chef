@@ -23,5 +23,5 @@ interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE id = :id")
-    fun getFavoriteById(id: Int): RecipeWithIngredient
+    fun getFavoriteById(id: Int): RecipeWithIngredient?
 }

@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.common.toRecipeDto
-import com.example.chefgram.data.repository.MealsRepository
+import com.example.chefgram.data.repository.RecipeRepository
 import com.example.chefgram.domain.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateRecipeViewModel @Inject constructor(private val repository: MealsRepository) :
+class CreateRecipeViewModel @Inject constructor(private val repository: RecipeRepository) :
     ViewModel() {
 
     private val _errorEmptyFields = MutableLiveData<Boolean>(false)

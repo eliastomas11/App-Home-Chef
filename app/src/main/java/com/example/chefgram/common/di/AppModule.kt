@@ -2,15 +2,16 @@ package com.example.chefgram.common.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.chefgram.data.repository.MealsRepository
-import com.example.chefgram.data.repository.MealsRepositoryImpl
+import com.example.chefgram.data.repository.RecipeRepository
+import com.example.chefgram.data.repository.RecipeRepositoryImpl
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.local.LocalSource
 import com.example.chefgram.data.repository.local.db.DatabaseLocal
+import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheDao
 import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
-import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDAO
+import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDao
+import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
-import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeWithIngredientDao
 import com.example.chefgram.data.repository.remote.RecipeServiceApi
 import com.example.chefgram.data.repository.remote.RecipeInterceptor
 import com.example.chefgram.data.repository.remote.RemoteDataSource
@@ -73,16 +74,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRecipeCacheDao(db: DatabaseLocal): RecipeCacheDAO {
+    fun provideRecipeCacheDao(db: DatabaseLocal): RecipeCacheDao {
         return db.recipeCacheDAO()
     }
 
     @Provides
     @Singleton
-    fun provideRecipeWithIngredientDao(db: DatabaseLocal): RecipeWithIngredientDao {
-        return db.recipeWithIngredientDao()
+    fun provideIngredientDao(db: DatabaseLocal): IngredientDao {
+        return db.ingredientDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideIngredientCacheDao(db: DatabaseLocal): IngredientCacheDao {
+        return db.ingredientCacheDao()
+    }
     @Provides
     @Singleton
     fun provideFilterIngredientDao(db: DatabaseLocal): FilterIngredientDao {
@@ -92,8 +98,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(recipeDao: RecipeDao, recipeCacheDAO: RecipeCacheDAO): LocalSource {
-        return LocalDataSource(recipeDao, recipeCacheDAO)
+    fun provideLocalDataSource(recipeDao: RecipeDao, recipeCacheDAO: RecipeCacheDao,ingredientCacheDao: IngredientCacheDao,ingredientDao: IngredientDao): LocalSource {
+        return LocalDataSource(recipeDao, recipeCacheDAO,ingredientCacheDao,ingredientDao)
     }
 
     @Provides
@@ -114,8 +120,8 @@ object AppModule {
         coroutineDispatcher: CoroutineDispatcher,
         localDataSource: LocalDataSource,
         remoteDataSource: RemoteDataSource
-    ): MealsRepository {
-        return MealsRepositoryImpl(coroutineDispatcher, localDataSource, remoteDataSource)
+    ): RecipeRepository {
+        return RecipeRepositoryImpl(coroutineDispatcher, localDataSource, remoteDataSource)
     }
 
 

@@ -10,11 +10,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MealsRepositoryImpl @Inject constructor(
+class RecipeRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val localDataSource: LocalSource,
     private val remoteDataSource: RemoteSource
-) : MealsRepository {
+) : RecipeRepository {
 
 
     override suspend fun fetchRecipes(): List<Recipe> {
@@ -29,20 +29,17 @@ class MealsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun insertFavoriteRecipe(){
-
-    }
 
     override suspend fun getRecipesById(id: Int): Recipe {
         return withContext(dispatcher) {
-            val recipe = localDataSource.getRecipeById(id) ?: throw RuntimeException("Meal not found")
+            val recipe = localDataSource.getRecipeById(id) ?: throw RuntimeException("Recipe not found")
             return@withContext recipe.toRecipe()
         }
     }
 
-    override suspend fun saveRecipes(recipe: Recipe?): Long {
+    override suspend fun saveRecipes(recipe: Recipe): Long {
         return withContext(dispatcher) {
-            return@withContext localDataSource.saveToFavorites(recipe!!.toRecipeDto())
+            return@withContext localDataSource.saveToFavorites(recipe.toRecipeDto())
         }
     }
 

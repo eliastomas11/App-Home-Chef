@@ -9,7 +9,7 @@ import com.example.chefgram.data.repository.local.db.cache.recipewithingredientc
 
 
 @Dao
-interface RecipeCacheDAO {
+interface RecipeCacheDao {
 
     @Transaction
     @Query("SELECT * FROM recipe")
@@ -23,6 +23,6 @@ interface RecipeCacheDAO {
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE id = :id")
-    fun getRecipeById(id: Int): RecipeWithIngredientCache
+    fun getRecipeById(id: Int): RecipeWithIngredientCache?
 
 }

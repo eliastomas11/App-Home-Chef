@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chefgram.data.repository.MealsRepository
+import com.example.chefgram.data.repository.RecipeRepository
 import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepository) :
+class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRepository) :
     ViewModel() {
 
     private val _ingredientList = MutableLiveData<List<FilterItem>>()
@@ -41,7 +41,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
     private fun fetchMeals() {
         viewModelScope.launch {
             try {
-                _mealsList.value = mealsRepository.fetchRecipes()
+                _mealsList.value = recipeRepository.fetchRecipes()
             } catch (e: Exception) {
                 _mealsList.value = emptyList()
                 _errorMessage.value = e.message
@@ -54,7 +54,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         _loading.value = true
         try {
             viewModelScope.launch {
-                _recipeSelected.value = mealsRepository.getRecipesById(id)
+                _recipeSelected.value = recipeRepository.getRecipesById(id)
             }
         } catch (e: Exception) {
             _errorMessage.value = e.message
@@ -66,7 +66,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         viewModelScope.launch {
             try {
                 if (_recipeSelected.value?.isSaved == false) {
-                    val saved = mealsRepository.saveRecipes(_recipeSelected.value)
+                    val saved = recipeRepository.saveRecipes(_recipeSelected.value)
                     _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
                     _isSavedMessage.value = "Saved"
                 }else{
@@ -126,7 +126,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
 }
 
 /*@Suppress("UNCHECKED_CAST")
-class HomeViewModelFactory(private val mealRepository: MealsRepository) :
+class HomeViewModelFactory(private val mealRepository: RecipeRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return HomeViewModel(mealRepository) as T

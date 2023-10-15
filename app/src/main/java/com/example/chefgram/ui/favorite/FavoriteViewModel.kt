@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chefgram.data.repository.MealsRepository
+import com.example.chefgram.data.repository.RecipeRepository
 import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel()
-class FavoriteViewModel @Inject constructor(private val repository: MealsRepository) : ViewModel() {
+class FavoriteViewModel @Inject constructor(private val repository: RecipeRepository) : ViewModel() {
 
     private val _favoriteRecipeList = MutableLiveData<List<Recipe>>()
     val favoriteRecipeList: LiveData<List<Recipe>> get() = _favoriteRecipeList

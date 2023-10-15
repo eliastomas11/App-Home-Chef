@@ -6,23 +6,17 @@ import com.example.chefgram.common.toRecipeCache
 import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.common.toRecipeEntity
 import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheDao
-import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDAO
-import com.example.chefgram.data.repository.local.db.cache.recipewithingredientcache.RecipeWithIngredientCacheCrossRef
-import com.example.chefgram.data.repository.local.db.cache.recipewithingredientcache.RecipeWithIngredientCacheDao
+import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDao
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
-import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeIngredientCrossRef
-import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeWithIngredientDao
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
     private val recipeDao: RecipeDao,
-    private val recipeCacheDao: RecipeCacheDAO,
+    private val recipeCacheDao: RecipeCacheDao,
     private val ingredientCacheDao: IngredientCacheDao,
     private val ingredientDao: IngredientDao,
-    private val recipeWithIngredientCacheDao: RecipeWithIngredientCacheDao,
-    private val recipeWithIngredientDao: RecipeWithIngredientDao
 ) : LocalSource {
 
     override suspend fun getRecipes(): List<RecipeDto> {
@@ -31,21 +25,17 @@ class LocalDataSource @Inject constructor(
 
     override suspend fun saveRecipes(recipeDto: List<RecipeDto>) {
         recipeCacheDao.saveRecipe(recipeDto.map { it.toRecipeCache() })
-        ingredientCacheDao.saveToIngredientCache(recipeDto.flatMap { recipe -> recipe.ingredient.map { it.toIngredientCache() } })
-        recipeDto.forEach { recipe ->
-            recipe.ingredient.forEach { ingredient ->
-                recipeWithIngredientCacheDao.saveToRecipeWithIngredient(
-                    RecipeWithIngredientCacheCrossRef(recipe.id, ingredient.id)
-                )
+        ingredientCacheDao.saveToIngredientCache(recipeDto.flatMap { recipe ->
+            recipe.ingredient.map {
+                it.toIngredientCache().copy(recipeCacheId = recipe.id)
             }
-        }
+        })
     }
 
     override suspend fun saveToFavorites(recipe: RecipeDto): Long {
         recipeDao.saveToFavorites(recipe.toRecipeEntity())
-        ingredientDao.saveIngredients(recipe.ingredient.map { it.toIngredientEntity() })
-        recipe.ingredient.forEach { ingredient ->
-            recipeWithIngredientDao.saveToRecipeWithIngredient(RecipeIngredientCrossRef(recipe.id, ingredient.id))
+        recipe.ingredient.forEach {
+            ingredientDao.saveIngredients(it.toIngredientEntity().copy(id = recipe.id))
         }
         return 5
     }
@@ -63,10 +53,10 @@ class LocalDataSource @Inject constructor(
     }
 
     override suspend fun getRecipeById(id: Int): RecipeDto {
-        return recipeCacheDao.getRecipeById(id).toRecipeDto()
+        return recipeCacheDao.getRecipeById(id)?.toRecipeDto() ?: throw RuntimeException("Recipe not found")
     }
 
     override suspend fun getFavoriteRecipeById(id: Int): RecipeDto {
-        return recipeDao.getFavoriteById(id).toRecipeDto()
+        return recipeDao.getFavoriteById(id)?.toRecipeDto() ?: throw RuntimeException("Recipe not found")
     }
 }

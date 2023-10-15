@@ -10,7 +10,7 @@ interface IngredientDao {
     fun getAll(): List<IngredientEntity>
 
     @Query("SELECT * FROM ingredient WHERE id = :id")
-    fun getById(id: Int): IngredientEntity
+    fun getById(id: Int): IngredientEntity?
 
     @Query("DELETE FROM ingredient")
     fun clear()

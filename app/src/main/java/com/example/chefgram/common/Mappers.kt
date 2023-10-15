@@ -12,8 +12,8 @@ import com.example.chefgram.data.repository.remote.recipemodel.RecipeResponseDto
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
 
-fun RecipeResponseDto.toRecipeDto(): RecipeDto {
-    return RecipeDto(
+fun RecipeResponseDto.toRecipeDto(): RecipeDto =
+    RecipeDto(
         id = this.id,
         name = this.title,
         description = this.summary,
@@ -27,25 +27,7 @@ fun RecipeResponseDto.toRecipeDto(): RecipeDto {
         veryHealthy = this.veryHealthy,
         createdBy = this.sourceName
     )
-}
 
-
-fun RecipeDto.toRecipe(): Recipe {
-    return Recipe(
-        id = this.id,
-        title = this.name,
-        description = this.description,
-        image = this.image,
-        ingredients = this.ingredient.map { it.toRecipeIngredient() },
-        numServings = this.numServings,
-        cookingTime = this.cookTimeMinutes,
-        createdBy = this.createdBy,
-        vegan = this.veganFree,
-        dairyFree = this.dairyFree,
-        glutenFree = this.glutenFree,
-        veryHealthy = this.veryHealthy
-    )
-}
 
 fun RecipeDto.toRecipeEntity(): RecipeEntity =
     RecipeEntity(
@@ -62,9 +44,8 @@ fun RecipeDto.toRecipeEntity(): RecipeEntity =
         createdBy = this.createdBy
     )
 
-
-fun RecipeEntity.toRecipeDto(): RecipeDto {
-    return RecipeDto(
+fun RecipeEntity.toRecipeDto(): RecipeDto =
+    RecipeDto(
         id = this.id,
         name = this.name,
         description = this.description,
@@ -78,28 +59,23 @@ fun RecipeEntity.toRecipeDto(): RecipeDto {
         createdBy = this.createdBy,
         ingredient = emptyList(),
     )
-}
 
+fun RecipeDto.toRecipe(): Recipe =
+    Recipe(
+        id = this.id,
+        title = this.name,
+        description = this.description,
+        image = this.image,
+        ingredients = this.ingredient.map { it.toRecipeIngredient() },
+        numServings = this.numServings,
+        cookingTime = this.cookTimeMinutes,
+        createdBy = this.createdBy,
+        vegan = this.veganFree,
+        dairyFree = this.dairyFree,
+        glutenFree = this.glutenFree,
+        veryHealthy = this.veryHealthy
+    )
 
-fun IngredientDto.toRecipeIngredient(): RecipeIngredient = RecipeIngredient(
-    id = this.id,
-    name = this.name,
-    amount = this.amount,
-    unit = this.unit,
-    image = this.image,
-    type = this.aisle,
-    originalName = this.originalName
-)
-
-fun IngredientDto.toIngredientEntity(): IngredientEntity = IngredientEntity(
-    id = this.id,
-    name = this.name,
-    amount = this.amount,
-    unit = this.unit,
-    image = this.image,
-    type = this.aisle,
-    originalName = this.originalName
-)
 
 fun Recipe.toRecipeDto(): RecipeDto =
     RecipeDto(
@@ -117,6 +93,15 @@ fun Recipe.toRecipeDto(): RecipeDto =
         ingredient = this.ingredients.map { it.toIngredientDto() }
     )
 
+fun IngredientDto.toRecipeIngredient(): RecipeIngredient = RecipeIngredient(
+    id = this.id,
+    name = this.name,
+    amount = this.amount,
+    unit = this.unit,
+    image = this.image,
+    type = this.aisle,
+    originalName = this.originalName
+)
 
 fun RecipeIngredient.toIngredientDto(): IngredientDto = IngredientDto(
     id = this.id,
@@ -128,21 +113,47 @@ fun RecipeIngredient.toIngredientDto(): IngredientDto = IngredientDto(
     originalName = this.originalName
 )
 
-fun RecipeCacheEntity.toRecipeDto(): RecipeDto =
-    RecipeDto(
-        id = this.id,
-        name = this.name,
-        description = this.description,
-        image = this.image,
-        numServings = this.numServings,
-        cookTimeMinutes = this.cookTimeMinutes,
-        veganFree = this.veganFree,
-        dairyFree = this.dairyFree,
-        glutenFree = this.glutenFree,
-        veryHealthy = this.veryHealthy,
-        createdBy = this.createdBy,
-        ingredient = emptyList(),
-    )
+fun IngredientDto.toIngredientEntity(): IngredientEntity = IngredientEntity(
+    id = this.id,
+    name = this.name,
+    amount = this.amount,
+    unit = this.unit,
+    image = this.image,
+    type = this.aisle,
+    originalName = this.originalName,
+    recipeId = 0
+)
+
+fun IngredientEntity.toIngredientDto(): IngredientDto = IngredientDto(
+    id = this.id,
+    name = this.name,
+    originalName = this.originalName,
+    amount = this.amount,
+    unit = this.unit,
+    aisle = this.type,
+    image = this.image
+)
+
+fun IngredientDto.toIngredientCache(): IngredientCacheEntity = IngredientCacheEntity(
+    id = this.id,
+    name = this.name,
+    originalName = this.originalName,
+    amount = this.amount,
+    unit = this.unit,
+    type = this.aisle,
+    image = this.image,
+    recipeCacheId = 0
+)
+
+fun IngredientCacheEntity.toIngredientDto(): IngredientDto = IngredientDto(
+    id = this.id,
+    name = this.name,
+    originalName = this.originalName,
+    amount = this.amount,
+    unit = this.unit,
+    aisle = this.type,
+    image = this.image
+)
 
 fun RecipeWithIngredientCache.toRecipeDto(): RecipeDto =
     RecipeDto(
@@ -155,6 +166,23 @@ fun RecipeWithIngredientCache.toRecipeDto(): RecipeDto =
         veganFree = this.recipe.veganFree,
         dairyFree = this.recipe.dairyFree,
         glutenFree = this.recipe.glutenFree,
+        veryHealthy = this.recipe.veryHealthy,
+        createdBy = this.recipe.createdBy,
+        ingredient = this.ingredientList.map { it.toIngredientDto() },
+    )
+
+
+fun RecipeWithIngredient.toRecipeDto(): RecipeDto =
+    RecipeDto(
+        id = this.recipe.id,
+        name = this.recipe.name,
+        description = this.recipe.description,
+        image = this.recipe.image,
+        numServings = this.recipe.numServings,
+        cookTimeMinutes = this.recipe.cookTimeMinutes,
+        veganFree = this.recipe.veganFree,
+        glutenFree = this.recipe.glutenFree,
+        dairyFree = this.recipe.dairyFree,
         veryHealthy = this.recipe.veryHealthy,
         createdBy = this.recipe.createdBy,
         ingredient = this.ingredientList.map { it.toIngredientDto() },
@@ -175,48 +203,18 @@ fun RecipeDto.toRecipeCache(): RecipeCacheEntity =
         createdBy = this.createdBy,
     )
 
-fun IngredientDto.toIngredientCache(): IngredientCacheEntity = IngredientCacheEntity(
-    id = this.id,
-    name = this.name,
-    originalName = this.originalName,
-    amount = this.amount,
-    unit = this.unit,
-    type = this.aisle,
-    image = this.image
-)
-
-fun IngredientCacheEntity.toIngredientDto(): IngredientDto = IngredientDto(
-    id = this.id,
-    name = this.name,
-    originalName = this.originalName,
-    amount = this.amount,
-    unit = this.unit,
-    aisle = this.type,
-    image = this.image
-)
-
-fun RecipeWithIngredient.toRecipeDto(): RecipeDto =
+fun RecipeCacheEntity.toRecipeDto(): RecipeDto =
     RecipeDto(
-        id = this.recipe.id,
-        name = this.recipe.name,
-        description = this.recipe.description,
-        image = this.recipe.image,
-        numServings = this.recipe.numServings,
-        cookTimeMinutes = this.recipe.cookTimeMinutes,
-        veganFree = this.recipe.veganFree,
-        glutenFree = this.recipe.glutenFree,
-        dairyFree = this.recipe.dairyFree,
-        veryHealthy = this.recipe.veryHealthy,
-        createdBy = this.recipe.createdBy,
-        ingredient = this.ingredientList.map { it.toIngredientDto() },
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        image = this.image,
+        numServings = this.numServings,
+        cookTimeMinutes = this.cookTimeMinutes,
+        veganFree = this.veganFree,
+        dairyFree = this.dairyFree,
+        glutenFree = this.glutenFree,
+        veryHealthy = this.veryHealthy,
+        createdBy = this.createdBy,
+        ingredient = emptyList(),
     )
-
-fun IngredientEntity.toIngredientDto(): IngredientDto = IngredientDto(
-    id = this.id,
-    name = this.name,
-    originalName = this.originalName,
-    amount = this.amount,
-    unit = this.unit,
-    aisle = this.type,
-    image = this.image
-)
