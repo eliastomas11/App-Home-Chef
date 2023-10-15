@@ -1,5 +1,6 @@
 package com.example.chefgram.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,6 +46,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
             } catch (e: Exception) {
                 _mealsList.value = emptyList()
                 _errorMessage.value = e.message
+                Log.i("HTTP Response", e.message.toString())
             }
             _loading.value = false
         }

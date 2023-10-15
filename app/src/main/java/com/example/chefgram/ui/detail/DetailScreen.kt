@@ -1,6 +1,7 @@
 package com.example.chefgram.ui.detail
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +37,7 @@ class DetailScreen : Fragment() {
         viewModel.recipeSelected.observe(viewLifecycleOwner) {
             Glide.with(this).load(it.image).into(binding.detailImageIv)
             binding.detailTitleTv.text = it.title
-            binding.detailDescriptionTv.text = it.description
+            binding.detailDescriptionTv.text = Html.fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
         }
 
         binding.detailSaveFabButton.setOnClickListener {

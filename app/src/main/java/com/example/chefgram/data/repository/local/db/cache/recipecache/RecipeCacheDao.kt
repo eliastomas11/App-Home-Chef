@@ -12,17 +12,17 @@ import com.example.chefgram.data.repository.local.db.cache.recipewithingredientc
 interface RecipeCacheDao {
 
     @Transaction
-    @Query("SELECT * FROM recipe")
+    @Query("SELECT * FROM recipe_cache")
     fun getRecipes(): List<RecipeWithIngredientCache>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveRecipe(recipes: List<RecipeCacheEntity>)
 
-    @Query("DELETE FROM recipe")
+    @Query("DELETE FROM recipe_cache")
     fun clearCache()
 
     @Transaction
-    @Query("SELECT * FROM recipe WHERE id = :id")
+    @Query("SELECT * FROM recipe_cache WHERE id = :id")
     fun getRecipeById(id: Int): RecipeWithIngredientCache?
 
 }

@@ -1,6 +1,8 @@
 package com.example.chefgram.ui.home
 
 import android.graphics.Bitmap
+import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -41,14 +43,17 @@ class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: 
 
         fun bind(name: String, description: String, imageUrl: String,id: Int) {
             mealsItem.mealTitleTv.text = name
-            mealsItem.mealDescriptionTv.text = description
+            mealsItem.mealDescriptionTv.text = Html.fromHtml(description,Html.FROM_HTML_MODE_COMPACT)
             Glide.with(mealsItem.root.context.applicationContext)
                 .load(imageUrl)
                 .error(mealsItem.detailImageIv.drawable)
                 .encodeFormat(Bitmap.CompressFormat.JPEG)
                 .encodeQuality(80)
                 .into(mealsItem.detailImageIv)
-            mealsItem.root.setOnClickListener { action(id) }
+            mealsItem.root.setOnClickListener {
+                action(id)
+                Log.i("id elegido",id.toString())
+            }
         }
     }
 

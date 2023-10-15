@@ -1,5 +1,6 @@
 package com.example.chefgram.data.repository
 
+import android.util.Log
 import com.example.chefgram.common.toRecipe
 import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.data.repository.local.LocalSource
@@ -32,8 +33,8 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun getRecipesById(id: Int): Recipe {
         return withContext(dispatcher) {
-            val recipe = localDataSource.getRecipeById(id) ?: throw RuntimeException("Recipe not found")
-            return@withContext recipe.toRecipe()
+            val recipe = localDataSource.getRecipeById(id)
+            return@withContext recipe!!.toRecipe()
         }
     }
 

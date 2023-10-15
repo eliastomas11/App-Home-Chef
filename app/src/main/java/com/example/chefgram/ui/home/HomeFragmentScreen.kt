@@ -49,7 +49,6 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
-            Log.i("HTTP", errorMessage)
         }
 
         viewModel.mealsList.observe(viewLifecycleOwner) { mealList ->

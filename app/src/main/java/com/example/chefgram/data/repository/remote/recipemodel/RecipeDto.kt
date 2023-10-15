@@ -4,7 +4,7 @@ data class RecipeDto(
     val id: Int,
     val name: String,
     val description: String,
-    val image: String,
+    val image: String? = "",
     val numServings: Int = 0,
     val cookTimeMinutes: Int = 0,
     val ingredient: List<IngredientDto>,
