@@ -6,15 +6,15 @@ interface LocalSource {
 
     suspend fun getRecipes(): List<RecipeDto>
 
-    suspend fun saveRecipes(mealsDto: List<RecipeDto>)
+    suspend fun saveRecipes(recipesDto: List<RecipeDto>)
 
 
-    suspend fun saveToFavorites(meal: RecipeDto): Long
+    suspend fun saveToFavorites(recipe: RecipeDto): Long
 
 
     suspend fun getFavorites(): List<RecipeDto>
 
-    suspend fun deleteFromFavorites(meal: RecipeDto)
+    suspend fun deleteFromFavorites(recipe: RecipeDto)
 
     suspend fun clearCache()
 

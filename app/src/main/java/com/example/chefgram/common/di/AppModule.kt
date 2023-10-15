@@ -23,6 +23,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -34,7 +35,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(RecipeInterceptor()).build()
+        return OkHttpClient.Builder()
+            .addInterceptor(RecipeInterceptor())
+            .protocols(mutableListOf(Protocol.HTTP_1_1))
+            .build()
     }
 
     @Provides

@@ -1,9 +1,10 @@
 package com.example.chefgram.data.repository.local.db.ingredient
 
+import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+@Dao
 interface IngredientDao {
 
     @Query("SELECT * FROM ingredient")

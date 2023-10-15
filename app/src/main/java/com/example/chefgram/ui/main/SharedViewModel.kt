@@ -66,7 +66,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         viewModelScope.launch {
             try {
                 if (_recipeSelected.value?.isSaved == false) {
-                    val saved = recipeRepository.saveRecipes(_recipeSelected.value)
+                    val saved = recipeRepository.saveRecipes(_recipeSelected.value!!)
                     _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
                     _isSavedMessage.value = "Saved"
                 }else{

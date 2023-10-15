@@ -23,9 +23,9 @@ class LocalDataSource @Inject constructor(
         return recipeCacheDao.getRecipes().map { it.toRecipeDto() }
     }
 
-    override suspend fun saveRecipes(recipeDto: List<RecipeDto>) {
-        recipeCacheDao.saveRecipe(recipeDto.map { it.toRecipeCache() })
-        ingredientCacheDao.saveToIngredientCache(recipeDto.flatMap { recipe ->
+    override suspend fun saveRecipes(recipesDto: List<RecipeDto>) {
+        recipeCacheDao.saveRecipe(recipesDto.map { it.toRecipeCache() })
+        ingredientCacheDao.saveToIngredientCache(recipesDto.flatMap { recipe ->
             recipe.ingredient.map {
                 it.toIngredientCache().copy(recipeCacheId = recipe.id)
             }

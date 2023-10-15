@@ -1,6 +1,7 @@
 package com.example.chefgram.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -17,10 +18,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
     private lateinit var binding: HomeFragmentBinding
     private val navController by lazy { findNavController() }
-    private val adapter: RecipeAdapter = RecipeAdapter { selectedItem ->
-        navController.navigate(R.id.action_homeFragment_to_detailScreen)
-        viewModel.onMealClick(selectedItem)
-    }
+
     private val viewModel: SharedViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)
@@ -40,7 +38,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
         binding.recipeHomeRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
-        binding.recipeHomeRecyclerView.adapter = adapter
+
     }
 
     private fun initObservers() {
@@ -51,11 +49,18 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
+            Log.i("HTTP", errorMessage)
         }
 
         viewModel.mealsList.observe(viewLifecycleOwner) { mealList ->
-            adapter.setData(mealList)
-            adapter.notifyDataSetChanged()
+            val adapter: RecipeAdapter = RecipeAdapter(mealList) { selectedItem ->
+                navController.navigate(R.id.action_homeFragment_to_detailScreen)
+                viewModel.onMealClick(selectedItem)
+            }
+            binding.recipeHomeRecyclerView.adapter = adapter
+
+            //adapter.setData(mealList)
+            //adapter.notifyDataSetChanged()
         }
 
     }

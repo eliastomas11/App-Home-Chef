@@ -8,10 +8,10 @@ import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
 import com.example.chefgram.domain.model.Recipe
 
-class RecipeAdapter(private val action: (id: Int) -> Unit) :
+class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: Int) -> Unit) :
     RecyclerView.Adapter<RecipeAdapter.MealsViewHolder>() {
 
-    private var mealsList: List<Recipe> = emptyList()
+   // private var mealsList: List<Recipe> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -33,7 +33,7 @@ class RecipeAdapter(private val action: (id: Int) -> Unit) :
     }
 
     fun setData(recipeList: List<Recipe>?) {
-        mealsList = recipeList ?: emptyList()
+       // mealsList = recipeList ?: emptyList()
     }
 
     inner class MealsViewHolder(private val mealsItem: MealsRecyclerItemBinding) :

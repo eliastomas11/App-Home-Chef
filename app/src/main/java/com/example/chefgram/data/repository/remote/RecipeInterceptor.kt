@@ -2,8 +2,10 @@ package com.example.chefgram.data.repository.remote
 
 import android.util.Log
 import okhttp3.Interceptor
+import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
+import java.util.Arrays
 import javax.inject.Inject
 
 class RecipeInterceptor: Interceptor {
@@ -13,9 +15,10 @@ class RecipeInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val headersChain = chain.request()
             .newBuilder()
-            .addHeader("Content-Type:","application/json")
-            .addHeader("x-api-key:",key)
+            //.addHeader("Content-Type:","application/json")
+            //.addHeader("x-api-key:",key)
             .build()
+
 
         val response =  chain.proceed(headersChain)
 
