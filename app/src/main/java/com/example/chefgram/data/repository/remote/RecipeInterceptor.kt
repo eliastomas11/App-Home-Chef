@@ -4,8 +4,9 @@ import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody
+import javax.inject.Inject
 
-class RecipeInterceptor : Interceptor {
+class RecipeInterceptor: Interceptor {
 
     private val key = "74163ae884ba47179882de8e5467c1aa"
 

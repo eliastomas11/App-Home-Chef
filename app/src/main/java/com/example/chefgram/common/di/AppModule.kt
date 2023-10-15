@@ -7,9 +7,11 @@ import com.example.chefgram.data.repository.MealsRepositoryImpl
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.local.LocalSource
 import com.example.chefgram.data.repository.local.db.DatabaseLocal
-import com.example.chefgram.data.repository.local.db.MealCacheDao
-import com.example.chefgram.data.repository.local.db.MealDao
-import com.example.chefgram.data.repository.remote.MealServiceApi
+import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
+import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDAO
+import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
+import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeWithIngredientDao
+import com.example.chefgram.data.repository.remote.RecipeServiceApi
 import com.example.chefgram.data.repository.remote.RecipeInterceptor
 import com.example.chefgram.data.repository.remote.RemoteDataSource
 import dagger.Module
@@ -47,8 +49,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMealService(retrofit: Retrofit): MealServiceApi {
-        return retrofit.create(MealServiceApi::class.java)
+    fun provideMealService(retrofit: Retrofit): RecipeServiceApi {
+        return retrofit.create(RecipeServiceApi::class.java)
     }
 
     @Provides
@@ -65,26 +67,39 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMealDao(db: DatabaseLocal): MealDao {
-        return db.mealDao()
+    fun provideRecipeDao(db: DatabaseLocal): RecipeDao {
+        return db.recipeDao()
     }
 
     @Provides
     @Singleton
-    fun provideMealCacheDao(db: DatabaseLocal): MealCacheDao {
-        return db.mealCacheDao()
+    fun provideRecipeCacheDao(db: DatabaseLocal): RecipeCacheDAO {
+        return db.recipeCacheDAO()
     }
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(mealDao: MealDao, mealCacheDao: MealCacheDao): LocalSource {
-        return LocalDataSource(mealDao, mealCacheDao)
+    fun provideRecipeWithIngredientDao(db: DatabaseLocal): RecipeWithIngredientDao {
+        return db.recipeWithIngredientDao()
     }
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(mealServiceApi: MealServiceApi): RemoteDataSource {
-        return RemoteDataSource(mealServiceApi)
+    fun provideFilterIngredientDao(db: DatabaseLocal): FilterIngredientDao {
+        return db.filterIngredientDao()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(recipeDao: RecipeDao, recipeCacheDAO: RecipeCacheDAO): LocalSource {
+        return LocalDataSource(recipeDao, recipeCacheDAO)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(recipeServiceApi: RecipeServiceApi): RemoteDataSource {
+        return RemoteDataSource(recipeServiceApi)
     }
 
     @Provides

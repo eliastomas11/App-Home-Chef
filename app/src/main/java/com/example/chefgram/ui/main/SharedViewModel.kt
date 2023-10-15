@@ -41,7 +41,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
     private fun fetchMeals() {
         viewModelScope.launch {
             try {
-                _mealsList.value = mealsRepository.fetchMeals()
+                _mealsList.value = mealsRepository.fetchRecipes()
             } catch (e: Exception) {
                 _mealsList.value = emptyList()
                 _errorMessage.value = e.message
@@ -54,7 +54,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         _loading.value = true
         try {
             viewModelScope.launch {
-                _recipeSelected.value = mealsRepository.getMealById(id)
+                _recipeSelected.value = mealsRepository.getRecipesById(id)
             }
         } catch (e: Exception) {
             _errorMessage.value = e.message
@@ -66,7 +66,7 @@ class SharedViewModel @Inject constructor(private val mealsRepository: MealsRepo
         viewModelScope.launch {
             try {
                 if (_recipeSelected.value?.isSaved == false) {
-                    val saved = mealsRepository.saveMeal(_recipeSelected.value)
+                    val saved = mealsRepository.saveRecipes(_recipeSelected.value)
                     _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
                     _isSavedMessage.value = "Saved"
                 }else{

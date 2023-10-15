@@ -1,9 +1,9 @@
 package com.example.chefgram.data.repository.remote
 
-import com.example.chefgram.data.mealremotemodel.RecipeDto
+import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
 
 interface RemoteSource {
 
-    suspend fun getMeals(): List<RecipeDto>
+    suspend fun getRecipes(): List<RecipeDto>
 
 }

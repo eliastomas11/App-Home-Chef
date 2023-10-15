@@ -1,4 +1,4 @@
-package com.example.chefgram.data.mealremotemodel.unusedmodel
+package com.example.chefgram.data.repository.remote.recipemodel.unusedmodel
 
 data class Us(
     val amount: Double,
