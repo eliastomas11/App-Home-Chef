@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide
 import com.example.chefgram.databinding.MealsRecyclerItemBinding
 import com.example.chefgram.domain.model.Recipe
 
-class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: Int) -> Unit) :
+class RecipeAdapter(private val action: (id: Int) -> Unit) :
     RecyclerView.Adapter<RecipeAdapter.MealsViewHolder>() {
 
-   // private var mealsList: List<Recipe> = emptyList()
+    private var mealsList: List<Recipe> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -35,7 +35,7 @@ class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: 
     }
 
     fun setData(recipeList: List<Recipe>?) {
-       // mealsList = recipeList ?: emptyList()
+       mealsList = recipeList ?: emptyList()
     }
 
     inner class MealsViewHolder(private val mealsItem: MealsRecyclerItemBinding) :
@@ -44,7 +44,7 @@ class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: 
         fun bind(name: String, description: String, imageUrl: String,id: Int) {
             mealsItem.mealTitleTv.text = name
             mealsItem.mealDescriptionTv.text = Html.fromHtml(description,Html.FROM_HTML_MODE_COMPACT)
-            Glide.with(mealsItem.root.context.applicationContext)
+            Glide.with(mealsItem.root.context)
                 .load(imageUrl)
                 .error(mealsItem.detailImageIv.drawable)
                 .encodeFormat(Bitmap.CompressFormat.JPEG)
@@ -52,7 +52,6 @@ class RecipeAdapter(private val mealsList:List<Recipe>,private val action: (id: 
                 .into(mealsItem.detailImageIv)
             mealsItem.root.setOnClickListener {
                 action(id)
-                Log.i("id elegido",id.toString())
             }
         }
     }

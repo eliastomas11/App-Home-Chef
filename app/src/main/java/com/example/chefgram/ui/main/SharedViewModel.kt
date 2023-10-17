@@ -1,6 +1,5 @@
 package com.example.chefgram.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,7 +45,6 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
             } catch (e: Exception) {
                 _mealsList.value = emptyList()
                 _errorMessage.value = e.message
-                Log.i("HTTP Response", e.message.toString())
             }
             _loading.value = false
         }
@@ -71,7 +69,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
                     val saved = recipeRepository.saveRecipes(_recipeSelected.value!!)
                     _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
                     _isSavedMessage.value = "Saved"
-                }else{
+                } else {
                     _isSavedMessage.value = "Already Saved"
                 }
             } catch (e: Exception) {
@@ -82,21 +80,22 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
     }
 
     private fun filterExclsuive(filterIngredients: List<RecipeIngredient>) {
-        val exclusiveList = mutableSetOf<Recipe>()
-        _mealsList.value!!.filterTo(exclusiveList) {
+        val newRecipeList = mutableSetOf<Recipe>()
+        _mealsList.value!!.filterTo(newRecipeList) {
             it.ingredients.containsAll(filterIngredients)
         }
-        _mealsList.value = exclusiveList.toList()
+        _mealsList.value = newRecipeList.toList()
     }
 
     private fun filterInclusive(filterIngredients: List<RecipeIngredient>) {
-        val abarcativeList = mutableSetOf<Recipe>()
+        val newRecipeList = mutableSetOf<Recipe>()
         for (ingredient in filterIngredients) {
-            _mealsList.value!!.filterTo(abarcativeList) {
+            _mealsList.value!!.filterTo(newRecipeList) {
                 it.ingredients.contains(ingredient)
             }
         }
-        _mealsList.value = abarcativeList.toList()
+        _mealsList.value = newRecipeList.toList()
+
     }
 
     fun filterByIngredients(filterParams: FilterParams) {
@@ -104,7 +103,6 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
             filterExclsuive(filterParams.ingredient)
         } else {
             filterInclusive(filterParams.ingredient)
-
         }
 
 
@@ -120,17 +118,9 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         }*/
     }
 
-    fun onFilterClick() {
-
+    fun onFilterClick(params: FilterParams) {
+        filterByIngredients(params)
     }
 
 
 }
-
-/*@Suppress("UNCHECKED_CAST")
-class HomeViewModelFactory(private val mealRepository: RecipeRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HomeViewModel(mealRepository) as T
-    }
-}*/

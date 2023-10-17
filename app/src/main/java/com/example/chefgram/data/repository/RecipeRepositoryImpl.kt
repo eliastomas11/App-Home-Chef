@@ -19,7 +19,6 @@ class RecipeRepositoryImpl @Inject constructor(
 
 
     override suspend fun fetchRecipes(): List<Recipe> {
-        //throw RuntimeException("Not implemented")
         return withContext(dispatcher) {
             var recipeDto = localDataSource.getRecipes()
             if (recipeDto.isEmpty()) {

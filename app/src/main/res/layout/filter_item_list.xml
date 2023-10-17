@@ -8,6 +8,7 @@
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/filter_option_box"
         android:layout_width="match_parent"
+        android:layout_margin="8dp"
         android:layout_height="wrap_content"
         tools:text="chicken" />
 

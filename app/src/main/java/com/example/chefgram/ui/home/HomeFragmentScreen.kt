@@ -20,6 +20,10 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     private val navController by lazy { findNavController() }
 
     private val viewModel: SharedViewModel by activityViewModels()
+    private val adapter = RecipeAdapter() { selectedRecipeId ->
+        viewModel.onMealClick(selectedRecipeId)
+        navController.navigate(R.id.action_homeFragment_to_detailScreen)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)
         initUI()
@@ -37,7 +41,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     private fun initRecycler() {
         binding.recipeHomeRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-
+        binding.recipeHomeRecyclerView.adapter = adapter
 
     }
 
@@ -51,23 +55,16 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
             Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.mealsList.observe(viewLifecycleOwner) { mealList ->
-            val adapter: RecipeAdapter = RecipeAdapter(mealList) { selectedItem ->
-                navController.navigate(R.id.action_homeFragment_to_detailScreen)
-                viewModel.onMealClick(selectedItem)
-            }
-            binding.recipeHomeRecyclerView.adapter = adapter
+        viewModel.mealsList.observe(viewLifecycleOwner) { recipeList ->
+            adapter.setData(recipeList)
+            adapter.notifyDataSetChanged()
 
-            //adapter.setData(mealList)
-            //adapter.notifyDataSetChanged()
         }
 
     }
 
     private fun initListeners() {
-        binding.filterButton.setOnClickListener {
-            viewModel.onFilterClick()
-        }
+
     }
 
 }
