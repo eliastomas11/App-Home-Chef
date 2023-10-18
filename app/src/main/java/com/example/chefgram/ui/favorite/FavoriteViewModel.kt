@@ -5,18 +5,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.RecipeRepository
-import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
-import com.example.chefgram.domain.model.RecipeIngredient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel()
-class FavoriteViewModel @Inject constructor(private val repository: RecipeRepository) : ViewModel() {
+class FavoriteViewModel @Inject constructor(private val repository: RecipeRepository) :
+    ViewModel() {
 
     private val _favoriteRecipeList = MutableLiveData<List<Recipe>>()
     val favoriteRecipeList: LiveData<List<Recipe>> get() = _favoriteRecipeList
+
+    private val _recipeSelected = MutableLiveData<Recipe>()
+    val recipeSelected: LiveData<Recipe> get() = _recipeSelected
+
+    private val _loading = MutableLiveData<Boolean>(true)
+    val loading: LiveData<Boolean> get() = _loading
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
 
     init {
         getFavoritesRecipes()
@@ -25,21 +33,20 @@ class FavoriteViewModel @Inject constructor(private val repository: RecipeReposi
     private fun getFavoritesRecipes() {
         viewModelScope.launch {
             _favoriteRecipeList.value = repository.getFavoriteRecipes()
+            _loading.value = false
         }
     }
 
-    fun filterRecipes(filterParams: FilterParams) {
-        if (filterParams.isCreatedByUser) {
-            filterByCreatedByUser(filterParams)
-        }
-        if (filterParams.exclusive) {
-            filterExclusive(filterParams.ingredient)
-        }else{
-            filterInclusive(filterParams.ingredient)
+    fun filter(query: String) {
+        viewModelScope.launch {
+            if (query.isNullOrBlank()) {
+                _favoriteRecipeList.value = repository.getFavoriteRecipes()
+            }
+            _favoriteRecipeList.value = repository.filterRecipes(query)
         }
     }
 
-    private fun filterByCreatedByUser(filterParams: FilterParams) {
+    private fun filterByCreatedByUser() {
         viewModelScope.launch {
             _favoriteRecipeList.value?.filter {
                 it.createdBy == "user"
@@ -47,21 +54,17 @@ class FavoriteViewModel @Inject constructor(private val repository: RecipeReposi
         }
     }
 
-    private fun filterExclusive(filterIngredients: List<RecipeIngredient>) {
-        val exclusiveList = mutableSetOf<Recipe>()
-        _favoriteRecipeList.value!!.filterTo(exclusiveList) {
-            it.ingredients.containsAll(filterIngredients)
+    fun onRecipeClick(id: Int) {
+        _loading.value = true
+        try {
+            viewModelScope.launch {
+                _recipeSelected.value = repository.getRecipesById(id)
+            }
+        } catch (e: Exception) {
+            _errorMessage.value = e.message
         }
-        _favoriteRecipeList.value = exclusiveList.toList()
+        _loading.value = false
     }
 
-    private fun filterInclusive(filterIngredients: List<RecipeIngredient>) {
-        val abarcativeList = mutableSetOf<Recipe>()
-        for (ingredient in filterIngredients) {
-            _favoriteRecipeList.value!!.filterTo(abarcativeList) {
-                it.ingredients.contains(ingredient)
-            }
-        }
-        _favoriteRecipeList.value = abarcativeList.toList()
-    }
+
 }

@@ -1,6 +1,9 @@
 package com.example.chefgram.data.repository.local
 
+import com.example.chefgram.data.repository.remote.recipemodel.CategoryDto
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
+import com.example.chefgram.domain.model.Category
+import com.example.chefgram.domain.model.IngredientFilterItem
 
 interface LocalSource {
 
@@ -21,4 +24,6 @@ interface LocalSource {
     suspend fun getRecipeById(id: Int): RecipeDto?
 
     suspend fun getFavoriteRecipeById(id: Int): RecipeDto?
+
+    suspend fun filterRecipes(query: String): List<RecipeDto>?
 }

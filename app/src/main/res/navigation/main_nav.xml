@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
     app:startDestination="@id/homeFragment">
 
@@ -14,6 +15,18 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_detailScreen"
+            app:destination="@id/detailScreen" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteScreen"
+            app:destination="@id/favoriteScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteScreen"
+        android:name="com.example.chefgram.ui.favorite.FavoriteScreen"
+        android:label="fragment_favorite_screen"
+        tools:layout="@layout/fragment_favorite_screen" >
+        <action
+            android:id="@+id/action_favoriteScreen_to_detailScreen"
             app:destination="@id/detailScreen" />
     </fragment>
 </navigation>

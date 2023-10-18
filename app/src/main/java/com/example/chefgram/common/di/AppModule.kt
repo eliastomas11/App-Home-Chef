@@ -10,6 +10,7 @@ import com.example.chefgram.data.repository.local.db.DatabaseLocal
 import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheDao
 import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
 import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDao
+import com.example.chefgram.data.repository.local.db.categories.CategoryDao
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
 import com.example.chefgram.data.repository.remote.RecipeServiceApi
@@ -64,8 +65,8 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             DatabaseLocal::class.java,
-            "meals.db"
-        )
+            "recipes.db")
+            .createFromAsset("recipes.db")
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -93,17 +94,31 @@ object AppModule {
     fun provideIngredientCacheDao(db: DatabaseLocal): IngredientCacheDao {
         return db.ingredientCacheDao()
     }
+
     @Provides
     @Singleton
     fun provideFilterIngredientDao(db: DatabaseLocal): FilterIngredientDao {
         return db.filterIngredientDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideCategoryDao(db: DatabaseLocal): CategoryDao {
+        return db.categoryDao()
+    }
+
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(recipeDao: RecipeDao, recipeCacheDAO: RecipeCacheDao,ingredientCacheDao: IngredientCacheDao,ingredientDao: IngredientDao): LocalSource {
-        return LocalDataSource(recipeDao, recipeCacheDAO,ingredientCacheDao,ingredientDao)
+    fun provideLocalDataSource(
+        recipeDao: RecipeDao,
+        recipeCacheDAO: RecipeCacheDao,
+        ingredientCacheDao: IngredientCacheDao,
+        ingredientDao: IngredientDao,
+        filterIngredientDao: FilterIngredientDao,
+        categoryDao: CategoryDao
+    ): LocalSource {
+        return LocalDataSource(recipeDao, recipeCacheDAO, ingredientCacheDao, ingredientDao,filterIngredientDao,categoryDao)
     }
 
     @Provides
@@ -127,7 +142,6 @@ object AppModule {
     ): RecipeRepository {
         return RecipeRepositoryImpl(coroutineDispatcher, localDataSource, remoteDataSource)
     }
-
 
 
 }

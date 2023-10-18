@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    app:cardElevation="10dp"
     app:cardCornerRadius="12dp"
     android:layout_margin="16dp">
 
@@ -14,7 +16,8 @@
             android:id="@+id/meal_title_tv"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="DGSDfgdsgfdfdgF"
@@ -26,7 +29,8 @@
             android:id="@+id/meal_description_tv"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Ingredients:"

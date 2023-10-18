@@ -1,11 +1,12 @@
 package com.example.chefgram.data.repository
 
-import android.util.Log
 import com.example.chefgram.common.toRecipe
 import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.data.repository.local.LocalSource
 import com.example.chefgram.data.repository.remote.RemoteSource
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
+import com.example.chefgram.domain.model.Categories
+import com.example.chefgram.domain.model.Category
 import com.example.chefgram.domain.model.Recipe
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -54,5 +55,12 @@ class RecipeRepositoryImpl @Inject constructor(
             return@withContext localDataSource.saveToFavorites(recipeDto)
         }
     }
+
+    override suspend fun filterRecipes(query: String): List<Recipe>? {
+        return withContext(dispatcher) {
+            return@withContext localDataSource.filterRecipes(query)?.map { it.toRecipe() }
+        }
+    }
+
 
 }

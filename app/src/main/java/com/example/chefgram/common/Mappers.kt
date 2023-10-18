@@ -3,12 +3,16 @@ package com.example.chefgram.common
 import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheEntity
 import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheEntity
 import com.example.chefgram.data.repository.local.db.cache.recipewithingredientcache.RecipeWithIngredientCache
+import com.example.chefgram.data.repository.local.db.categories.CategoryEntity
+import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredient
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientEntity
 import com.example.chefgram.data.repository.local.db.recipe.RecipeEntity
 import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeWithIngredient
+import com.example.chefgram.data.repository.remote.recipemodel.CategoryDto
 import com.example.chefgram.data.repository.remote.recipemodel.IngredientDto
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeResponseDto
+import com.example.chefgram.domain.model.IngredientFilterItem
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
 
@@ -34,7 +38,7 @@ fun RecipeDto.toRecipeEntity(): RecipeEntity =
         id = this.id,
         name = this.name,
         description = this.description,
-        image = this.image?:"",
+        image = this.image ?: "",
         numServings = this.numServings,
         cookTimeMinutes = this.cookTimeMinutes,
         veganFree = this.veganFree,
@@ -65,7 +69,7 @@ fun RecipeDto.toRecipe(): Recipe =
         id = this.id,
         title = this.name,
         description = this.description,
-        image = this.image?: "",
+        image = this.image ?: "",
         ingredients = this.ingredient.map { it.toRecipeIngredient() },
         numServings = this.numServings,
         cookingTime = this.cookTimeMinutes,
@@ -108,8 +112,8 @@ fun RecipeIngredient.toIngredientDto(): IngredientDto = IngredientDto(
     name = this.name,
     amount = this.amount,
     unit = this.unit,
-    image = this.image?:"",
-    aisle = this.type?:"",
+    image = this.image ?: "",
+    aisle = this.type ?: "",
     originalName = this.originalName,
 )
 
@@ -151,8 +155,8 @@ fun IngredientCacheEntity.toIngredientDto(): IngredientDto = IngredientDto(
     originalName = this.originalName,
     amount = this.amount,
     unit = this.unit,
-    aisle = this.type?:"",
-    image = this.image?:""
+    aisle = this.type ?: "",
+    image = this.image ?: ""
 )
 
 fun RecipeWithIngredientCache.toRecipeDto(): RecipeDto =
@@ -193,7 +197,7 @@ fun RecipeDto.toRecipeCache(): RecipeCacheEntity =
         id = this.id,
         name = this.name,
         description = this.description,
-        image = this.image?:"",
+        image = this.image ?: "",
         numServings = this.numServings,
         cookTimeMinutes = this.cookTimeMinutes,
         veganFree = this.veganFree,
@@ -218,3 +222,13 @@ fun RecipeCacheEntity.toRecipeDto(): RecipeDto =
         createdBy = this.createdBy,
         ingredient = emptyList(),
     )
+
+
+fun FilterIngredient.toIngredientFilterItem(): IngredientFilterItem =
+    IngredientFilterItem(name = this.name, id = this.id)
+
+fun CategoryEntity.toCategoryDto(): CategoryDto =
+    CategoryDto(name = this.name)
+
+
+

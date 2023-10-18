@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.chefgram.data.repository.RecipeRepository
 import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
-import com.example.chefgram.domain.model.RecipeIngredient
-import com.example.chefgram.ui.home.FilterItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,8 +15,6 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRepository) :
     ViewModel() {
 
-    private val _ingredientList = MutableLiveData<List<FilterItem>>()
-    val ingredientList: LiveData<List<FilterItem>> get() = _ingredientList
     private val _loading = MutableLiveData<Boolean>(true)
     val loading: LiveData<Boolean> get() = _loading
 
@@ -33,6 +29,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
 
     private val _isSavedMessage = MutableLiveData<String>("")
     val isSavedMessage: LiveData<String> get() = _isSavedMessage
+
 
     init {
         fetchMeals()
@@ -50,7 +47,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         }
     }
 
-    fun onMealClick(id: Int) {
+    fun onRecipeClick(id: Int) {
         _loading.value = true
         try {
             viewModelScope.launch {
@@ -79,47 +76,53 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         }
     }
 
-    private fun filterExclsuive(filterIngredients: List<RecipeIngredient>) {
+    private fun filterExclsuive(filterIngredients: List<String>) {
         val newRecipeList = mutableSetOf<Recipe>()
-        _mealsList.value!!.filterTo(newRecipeList) {
-            it.ingredients.containsAll(filterIngredients)
-        }
-        _mealsList.value = newRecipeList.toList()
-    }
 
-    private fun filterInclusive(filterIngredients: List<RecipeIngredient>) {
-        val newRecipeList = mutableSetOf<Recipe>()
-        for (ingredient in filterIngredients) {
-            _mealsList.value!!.filterTo(newRecipeList) {
-                it.ingredients.contains(ingredient)
+        _mealsList.value!!.forEach { recipe ->
+            if (filterIngredients.containsAll(recipe.ingredients.map { it.name })) {
+                newRecipeList.add(recipe)
             }
         }
-        _mealsList.value = newRecipeList.toList()
 
+        _mealsList.value = newRecipeList.toList()
     }
 
-    fun filterByIngredients(filterParams: FilterParams) {
-        if (filterParams.exclusive) {
-            filterExclsuive(filterParams.ingredient)
-        } else {
-            filterInclusive(filterParams.ingredient)
-        }
+    private fun filterInclusive(filterIngredients: Map<Int, String>) {
+        val newRecipeList = mutableSetOf<Recipe>()
 
-
-        //version 2
-        /*for(ingredient in filterParams.ingredient){
-            for(recipe in _mealsList.value!!){
-                for(recipeIngredient in recipe.ingredients){
-                    if(recipeIngredient.name == ingredient.name){
-                        newList.add(recipe)
-                    }
+        _mealsList.value!!.forEach { recipe ->
+            recipe.ingredients.forEach {
+                if (filterIngredients.values.contains(it.name)) {
+                    newRecipeList.add(recipe)
                 }
             }
-        }*/
+        }
+
+        _mealsList.value = newRecipeList.toList()
+
     }
 
-    fun onFilterClick(params: FilterParams) {
-        filterByIngredients(params)
+    fun filterByIngredients(params: FilterParams) {
+        /*if (params.exclusive) {
+            filterExclsuive(params.ingredientList)
+        } else {
+            filterInclusive(params.ingredientList)
+        }*/
+
+    }
+
+
+    fun filter(query: String) {
+        viewModelScope.launch {
+            _mealsList.value = recipeRepository.filterRecipes(query)
+        }
+    }
+
+    fun getOriginalList() {
+        viewModelScope.launch {
+            _mealsList.value = recipeRepository.fetchRecipes()
+        }
     }
 
 

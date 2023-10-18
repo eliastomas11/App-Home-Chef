@@ -22,66 +22,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/recipe_search_bar"
+
+        <androidx.appcompat.widget.SearchView
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-            <LinearLayout
-                android:id="@+id/filter_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="4dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="3"
-                    android:text="Filter"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/dropdown_arrow"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="0.6"
-                    android:src="@drawable/baseline_keyboard_arrow_down_24"
-                    app:tint="?attr/colorOnSurface" />
-
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/search_bar"
+            android:hint="Search a recipe"
+            style="@style/ShapeAppearanceOverlay.Material3.SearchBar"
+            app:iconifiedByDefault="false"
+            app:layout_behavior=""
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <com.google.android.material.search.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search a recipe"
-        app:iconifiedByDefault="false"
-        app:layout_anchor="@id/recipe_search_bar">
 
-    </com.google.android.material.search.SearchView>
+
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/app_btm_bar"
@@ -89,9 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:fabAlignmentMode="center"
-        app:fabAnchorMode="cradle"
-        app:fabCradleMargin="20dp"
-        app:fabCradleRoundedCornerRadius="20dp"
+        app:fabAnchorMode="embed"
         app:hideOnScroll="true">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -112,7 +66,7 @@
         android:src="@drawable/baseline_create_24"
         app:layout_anchor="@id/app_btm_bar"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton" />
+         />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

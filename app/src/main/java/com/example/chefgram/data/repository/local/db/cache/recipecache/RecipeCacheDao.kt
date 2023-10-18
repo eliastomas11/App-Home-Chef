@@ -24,5 +24,7 @@ interface RecipeCacheDao {
     @Transaction
     @Query("SELECT * FROM recipe_cache WHERE id = :id")
     fun getRecipeById(id: Int): RecipeWithIngredientCache?
+    @Query("SELECT * FROM recipe_cache WHERE name LIKE '%' || :query || '%'")
+    fun filterRecipes(query: String): List<RecipeWithIngredientCache>?
 
 }

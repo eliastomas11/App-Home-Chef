@@ -21,7 +21,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
     private val viewModel: SharedViewModel by activityViewModels()
     private val adapter = RecipeAdapter() { selectedRecipeId ->
-        viewModel.onMealClick(selectedRecipeId)
+        viewModel.onRecipeClick(selectedRecipeId)
         navController.navigate(R.id.action_homeFragment_to_detailScreen)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +53,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
+            Log.i("ERROR MESSAGE", errorMessage)
         }
 
         viewModel.mealsList.observe(viewLifecycleOwner) { recipeList ->

@@ -18,6 +18,8 @@ class FavoriteScreen : Fragment() {
     private val binding: FragmentFavoriteScreenBinding get() = _binding!!
 
     private val viewModel: FavoriteViewModel by viewModels()
+    private val navController by lazy { findNavController() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +37,14 @@ class FavoriteScreen : Fragment() {
 
     private fun initObservers() {
         viewModel.favoriteRecipeList.observe(viewLifecycleOwner){
-            binding.favoriteRecipesRecyclerView.adapter = FavoriteAdapter(it){
-                //Navigation to detail Screen
+            binding.favoriteRecipesRecyclerView.adapter = FavoriteAdapter(it){recipeId ->
+                viewModel.onRecipeClick(recipeId)
+                navController.navigate(R.id.action_favoriteScreen_to_detailScreen)
             }
 
+        }
+        viewModel.loading.observe(viewLifecycleOwner){
+            binding.favoriteLoadingProgressBar.visibility = if(it) View.VISIBLE else View.GONE
         }
     }
 
@@ -50,6 +56,7 @@ class FavoriteScreen : Fragment() {
         binding.createRecipeFb.setOnClickListener {
             //Navigate to CreateRecipe Flow
         }
+
     }
 
 

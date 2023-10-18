@@ -6,6 +6,8 @@ import com.example.chefgram.data.repository.local.db.cache.ingredientcache.Ingre
 import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheEntity
 import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDao
 import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheEntity
+import com.example.chefgram.data.repository.local.db.categories.CategoryDao
+import com.example.chefgram.data.repository.local.db.categories.CategoryEntity
 import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredient
 import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
@@ -14,9 +16,9 @@ import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeEntity
 
 @Database(
-    entities = [RecipeEntity::class, IngredientEntity::class, FilterIngredient::class, IngredientCacheEntity::class, RecipeCacheEntity::class],
-    version = 2,
-    exportSchema = false
+    entities = [RecipeEntity::class, IngredientEntity::class, FilterIngredient::class, IngredientCacheEntity::class, RecipeCacheEntity::class, CategoryEntity::class],
+    version = 3,
+    exportSchema = true
 )
 abstract class DatabaseLocal : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
@@ -24,4 +26,5 @@ abstract class DatabaseLocal : RoomDatabase() {
     abstract fun filterIngredientDao(): FilterIngredientDao
     abstract fun ingredientDao(): IngredientDao
     abstract fun ingredientCacheDao(): IngredientCacheDao
+    abstract fun categoryDao(): CategoryDao
 }

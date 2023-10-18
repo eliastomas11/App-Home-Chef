@@ -1,13 +1,14 @@
 package com.example.chefgram.ui.main
 
 import android.os.Bundle
-import android.view.View
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.get
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.example.chefgram.R
 import com.example.chefgram.databinding.ActivityMainBinding
-import com.example.chefgram.domain.model.FilterParams
-import com.example.chefgram.domain.model.RecipeIngredient
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,27 +17,45 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<SharedViewModel>()
     private var visibilelist = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val categoyList = listOf<CategoryItem>(CategoryItem("ingredients"))
-        val recipeIngredient = RecipeIngredient(12061,"almonds",5.0,"g","","","almond")
-        val parametros = listOf<FilterParams>(FilterParams(listOf(recipeIngredient)))
-        binding.categoryList.layoutManager = LinearLayoutManager(this)
-        binding.categoryList.adapter = FilterAdapter(categoyList,parametros) {
-            val recipe = RecipeIngredient(12061,it,5.0,"g","","","almond")
-            viewModel.onFilterClick(FilterParams(listOf(recipe)))
-        }
-        binding.dropdownArrow.setOnClickListener {
-            visibilelist = !visibilelist
-            if (visibilelist) {
-                binding.categoryList.visibility = View.VISIBLE
-            } else {
-                binding.categoryList.visibility = View.GONE
+        initUI()
+        val searchBar = binding.searchBar
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.filter(it)
+                }
+                return true
             }
-        }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText.isNullOrBlank()){
+                    viewModel.getOriginalList()
+                }else{
+                    viewModel.filter(newText)
+                }
+                return true
+            }
+        })
     }
+
+
+    private fun initUI() {
+        initNavigation()
+    }
+
+    private fun initNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.screen_fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.btmNavigation.setupWithNavController(navController)
+    }
+
 
 }
 
