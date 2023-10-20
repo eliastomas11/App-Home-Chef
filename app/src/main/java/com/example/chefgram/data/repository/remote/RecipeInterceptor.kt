@@ -5,6 +5,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import androidx.core.os.BuildCompat
+import com.example.chefgram.BuildConfig
+import com.example.chefgram.common.StringUtils
 import com.example.chefgram.common.errorhandling.CustomException
 import okhttp3.Interceptor
 import okhttp3.Protocol
@@ -15,7 +18,7 @@ import javax.inject.Inject
 
 class RecipeInterceptor @Inject constructor(val context: Context): Interceptor {
 
-    private val key = "74163ae884ba47179882de8e5467c1aa"
+    private val key = BuildConfig.API_KEY
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val headersChain = chain.request()

@@ -19,6 +19,8 @@ import com.example.chefgram.data.repository.local.prefs.PreferencesRepository
 import com.example.chefgram.data.repository.local.prefs.PreferencesRepositoryImpl
 import com.example.chefgram.data.repository.local.prefs.PreferencesSource
 import com.example.chefgram.data.repository.local.prefs.PreferencesSourceImpl
+import com.example.chefgram.data.repository.notifications.RecipeNotificationService
+import com.example.chefgram.data.repository.notifications.RecipeNotificationServiceImpl
 import com.example.chefgram.data.repository.remote.RecipeServiceApi
 import com.example.chefgram.data.repository.remote.RecipeInterceptor
 import com.example.chefgram.data.repository.remote.RemoteDataSource
@@ -172,4 +174,9 @@ object AppModule {
         return PreferencesRepositoryImpl(preferencesSource)
     }
 
+    @Provides
+    @Singleton
+    fun provideRecipeNotificationService(@ApplicationContext context: Context): RecipeNotificationService {
+        return RecipeNotificationServiceImpl(context)
+    }
 }

@@ -19,6 +19,9 @@ class StringUtils() {
             }
         }
 
+        fun getApiKey(context:Context): String{
+            return getString(context,R.string.api_key)
+        }
     }
 
 }

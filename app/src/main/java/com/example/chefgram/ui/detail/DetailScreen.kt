@@ -54,6 +54,10 @@ class DetailScreen : Fragment() {
             Toast.makeText(requireContext(),StringUtils.getErrorString(requireContext(),it),Toast.LENGTH_SHORT).show()
         }
 
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.detailLoadingProgressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
     }
 
     private fun setScreenState(recipe: Recipe) {

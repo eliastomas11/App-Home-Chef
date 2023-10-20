@@ -11,4 +11,13 @@
     <string name="no_network_connection_error">No Network Connection try again later or connect to network</string>
     <string name="general_error">Error Happened refresh or try again later</string>
     <string name="network_error">Network Error Happened, Refresh or try again later</string>
+    <string name="notification_title">What are we eating today?</string>
+    <string name="notification_content">What about trying something new today?</string>
+    <string name="notification_channel_name">RecipeNotificationChannel</string>
+    <string name="notification_channel_id">RecipeNotification</string>
+    <string name="channel_description">Notification channel for sending notifications to the user</string>
+    <string name="notification_id_reminder">reminderToCook</string>
+    <string name="notification_permission_rationale">Permission Requiered to show notifications and reminders</string>
+    <string name="api_key">\"API_KEY\"</string>
+    <string name="logo_title_of_the_app_image_description">Logo title of the app</string>
 </resources>

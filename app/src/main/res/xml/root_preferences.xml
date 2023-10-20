@@ -7,7 +7,6 @@
 
         <SwitchPreferenceCompat
             app:key="notifications"
-            app:defaultValue="true"
             app:icon="@drawable/notifications_icon"
             app:title="Enable notifications"/>
 

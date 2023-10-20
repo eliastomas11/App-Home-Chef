@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 
 }
@@ -19,6 +20,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY")}\"")
+
     }
 
     buildTypes {
@@ -30,6 +33,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildFeatures.buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -48,6 +52,8 @@ dependencies {
     implementation("androidx.preference:preference:1.2.0")
     val lifecycle_version = "2.6.2"
     val room_version = "2.5.2"
+    val lottieVersion = "6.1.0"
+
 
     //ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -78,6 +84,11 @@ dependencies {
 
     //SwipeLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    //Lottie
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
+    //Splash
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

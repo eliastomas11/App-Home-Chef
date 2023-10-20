@@ -48,7 +48,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
                 _mealsList.value = emptyList()
                 _mainError.value = e.mapToCustomError()
             } catch (e: Exception) {
-                _mainError.value = CustomErrors.GeneralError(e.message)
+                _mainError.value = CustomErrors.GeneralError
             }
             _loading.value = false
         }
@@ -83,7 +83,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
             } catch (e: CustomException) {
                 _mainError.value = e.mapToCustomError()
             } catch (e: Exception) {
-                _mainError.value = CustomErrors.GeneralError(e.localizedMessage)
+                _mainError.value = CustomErrors.GeneralError
             }
 
 
@@ -102,7 +102,7 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         } catch (e: CustomException) {
             _mainError.value = e.mapToCustomError()
         } catch (e: Exception) {
-            _mainError.value = CustomErrors.GeneralError(e.message)
+            _mainError.value = CustomErrors.GeneralError
         }
     }
 
@@ -147,5 +147,11 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
     fun homeInit() {
         fetchMeals()
         _refreshing.value = false
+    }
+
+    fun notificationPermissionGranted() {
+        viewModelScope.launch {
+            //recipeRepository.notificationsEnabled() Flow para que se permitan las notificaicones
+        }
     }
 }

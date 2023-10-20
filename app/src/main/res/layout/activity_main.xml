@@ -20,6 +20,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:id="@+id/toolbar"
+                app:navigationIconTint="?attr/colorOnBackground"
                 app:navigationIcon="@drawable/baseline_arrow_back_24"
                 android:layout_height="?android:attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
@@ -30,13 +31,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    app:tint="@color/white"
+                    app:tint="?attr/colorOnBackground"
                     android:layout_gravity="center"
-                    android:src="@drawable/app_title_logo"/>
+                    android:src="@drawable/app_title_logo"
+                    android:contentDescription="@string/logo_title_of_the_app_image_description" />
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_bar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:iconifiedByDefault="true"
                     android:layout_gravity="end"
