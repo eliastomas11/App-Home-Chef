@@ -1,15 +1,16 @@
 package com.example.chefgram.data.repository
 
+import android.util.Log
+import com.example.chefgram.common.errorhandling.CustomException
 import com.example.chefgram.common.toRecipe
 import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.data.repository.local.LocalSource
 import com.example.chefgram.data.repository.remote.RemoteSource
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
-import com.example.chefgram.domain.model.Categories
-import com.example.chefgram.domain.model.Category
 import com.example.chefgram.domain.model.Recipe
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class RecipeRepositoryImpl @Inject constructor(
@@ -20,13 +21,18 @@ class RecipeRepositoryImpl @Inject constructor(
 
 
     override suspend fun fetchRecipes(): List<Recipe> {
-        return withContext(dispatcher) {
-            var recipeDto = localDataSource.getRecipes()
-            if (recipeDto.isEmpty()) {
-                recipeDto = remoteDataSource.getRecipes()
-                localDataSource.saveRecipes(recipeDto)
+        return try {
+            withContext(dispatcher) {
+                var recipeDto = localDataSource.getRecipes()
+                if (recipeDto.isEmpty()) {
+                    Log.i("ENTRO POR NETWORK","ENTRO POR NETWORK")
+                    recipeDto = remoteDataSource.getRecipes()
+                    localDataSource.saveRecipes(recipeDto)
+                }
+                return@withContext recipeDto.map { it.toRecipe() }
             }
-            return@withContext recipeDto.map { it.toRecipe() }
+        } catch (e: SocketTimeoutException) {
+            throw CustomException.TimeOutException
         }
     }
 
@@ -34,7 +40,7 @@ class RecipeRepositoryImpl @Inject constructor(
     override suspend fun getRecipesById(id: Int): Recipe {
         return withContext(dispatcher) {
             val recipe = localDataSource.getRecipeById(id)
-            return@withContext recipe!!.toRecipe()
+            return@withContext recipe.toRecipe()
         }
     }
 
@@ -46,7 +52,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteRecipes(): List<Recipe> {
         return withContext(dispatcher) {
-            localDataSource.getFavorites().map { it.toRecipe() }
+            return@withContext localDataSource.getFavorites().map { it.toRecipe() }
         }
     }
 
@@ -56,9 +62,15 @@ class RecipeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun filterRecipes(query: String): List<Recipe>? {
+    override suspend fun filterRecipes(query: String): Set<Recipe> {
         return withContext(dispatcher) {
-            return@withContext localDataSource.filterRecipes(query)?.map { it.toRecipe() }
+            return@withContext localDataSource.filterRecipes(query).map { it.toRecipe() }.toSet()
+        }
+    }
+
+    override suspend fun clearCache() {
+        withContext(dispatcher) {
+            localDataSource.clearCache()
         }
     }
 

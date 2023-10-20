@@ -17,7 +17,7 @@ import com.example.chefgram.data.repository.local.db.recipe.RecipeEntity
 
 @Database(
     entities = [RecipeEntity::class, IngredientEntity::class, FilterIngredient::class, IngredientCacheEntity::class, RecipeCacheEntity::class, CategoryEntity::class],
-    version = 3,
+    version = 1,
     exportSchema = true
 )
 abstract class DatabaseLocal : RoomDatabase() {

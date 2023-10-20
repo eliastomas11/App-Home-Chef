@@ -1,9 +1,9 @@
 package com.example.chefgram.data.repository.local
 
-import com.example.chefgram.common.toCategoryDto
+import android.util.Log
+import com.example.chefgram.common.errorhandling.CustomException
 import com.example.chefgram.common.toIngredientCache
 import com.example.chefgram.common.toIngredientEntity
-import com.example.chefgram.common.toIngredientFilterItem
 import com.example.chefgram.common.toRecipeCache
 import com.example.chefgram.common.toRecipeDto
 import com.example.chefgram.common.toRecipeEntity
@@ -13,9 +13,7 @@ import com.example.chefgram.data.repository.local.db.categories.CategoryDao
 import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
-import com.example.chefgram.data.repository.remote.recipemodel.CategoryDto
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
-import com.example.chefgram.domain.model.IngredientFilterItem
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
@@ -41,11 +39,11 @@ class LocalDataSource @Inject constructor(
     }
 
     override suspend fun saveToFavorites(recipe: RecipeDto): Long {
-        recipeDao.saveToFavorites(recipe.toRecipeEntity())
+        val saved = recipeDao.saveToFavorites(recipe.toRecipeEntity())
         recipe.ingredient.forEach {
-            ingredientDao.saveIngredients(it.toIngredientEntity().copy(id = recipe.id))
+            ingredientDao.saveIngredients(it.toIngredientEntity().copy(recipeId = recipe.id))
         }
-        return 5
+        return saved
     }
 
     override suspend fun getFavorites(): List<RecipeDto> {
@@ -61,15 +59,15 @@ class LocalDataSource @Inject constructor(
     }
 
     override suspend fun getRecipeById(id: Int): RecipeDto {
-        return recipeCacheDao.getRecipeById(id)?.toRecipeDto() ?: throw RuntimeException("Recipe not found")
+        return recipeCacheDao.getRecipeById(id)?.toRecipeDto() ?: throw CustomException.RecipeNotFoundException
     }
 
     override suspend fun getFavoriteRecipeById(id: Int): RecipeDto {
-        return recipeDao.getFavoriteById(id)?.toRecipeDto() ?: throw RuntimeException("Recipe not found")
+        return recipeDao.getFavoriteById(id)?.toRecipeDto() ?: throw CustomException.RecipeNotFoundException
     }
 
-    override suspend fun filterRecipes(query: String): List<RecipeDto>? {
-        return recipeCacheDao.filterRecipes(query)?.map { it.toRecipeDto() }
+    override suspend fun filterRecipes(query: String): List<RecipeDto> {
+        return recipeCacheDao.filterRecipes(query)?.map { it.toRecipeDto() } ?: emptyList()
     }
 
 }

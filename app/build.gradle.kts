@@ -45,6 +45,7 @@ kapt {
 }
 
 dependencies {
+    implementation("androidx.preference:preference:1.2.0")
     val lifecycle_version = "2.6.2"
     val room_version = "2.5.2"
 
@@ -74,6 +75,9 @@ dependencies {
     //Navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.4")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.4")
+
+    //SwipeLayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

@@ -27,6 +27,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -35,9 +36,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideInterceptor(@ApplicationContext context: Context): RecipeInterceptor {
+        return RecipeInterceptor(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(recipeInterceptor: RecipeInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(RecipeInterceptor())
+            .addInterceptor(recipeInterceptor)
             .protocols(mutableListOf(Protocol.HTTP_1_1))
             .build()
     }

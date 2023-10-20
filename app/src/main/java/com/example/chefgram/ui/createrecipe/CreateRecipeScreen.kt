@@ -6,11 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.chefgram.R
 import com.example.chefgram.databinding.FragmentCreateRecipeScreenBinding
-import com.example.chefgram.databinding.FragmentFavoriteScreenBinding
-import com.example.chefgram.ui.favorite.FavoriteAdapter
-import com.example.chefgram.ui.favorite.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

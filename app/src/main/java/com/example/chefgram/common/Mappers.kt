@@ -48,22 +48,6 @@ fun RecipeDto.toRecipeEntity(): RecipeEntity =
         createdBy = this.createdBy
     )
 
-fun RecipeEntity.toRecipeDto(): RecipeDto =
-    RecipeDto(
-        id = this.id,
-        name = this.name,
-        description = this.description,
-        image = this.image,
-        numServings = this.numServings,
-        cookTimeMinutes = this.cookTimeMinutes,
-        veganFree = this.veganFree,
-        dairyFree = this.dairyFree,
-        glutenFree = this.glutenFree,
-        veryHealthy = this.veryHealthy,
-        createdBy = this.createdBy,
-        ingredient = emptyList(),
-    )
-
 fun RecipeDto.toRecipe(): Recipe =
     Recipe(
         id = this.id,
@@ -205,22 +189,6 @@ fun RecipeDto.toRecipeCache(): RecipeCacheEntity =
         dairyFree = this.dairyFree,
         veryHealthy = this.veryHealthy,
         createdBy = this.createdBy,
-    )
-
-fun RecipeCacheEntity.toRecipeDto(): RecipeDto =
-    RecipeDto(
-        id = this.id,
-        name = this.name,
-        description = this.description,
-        image = this.image,
-        numServings = this.numServings,
-        cookTimeMinutes = this.cookTimeMinutes,
-        veganFree = this.veganFree,
-        dairyFree = this.dairyFree,
-        glutenFree = this.glutenFree,
-        veryHealthy = this.veryHealthy,
-        createdBy = this.createdBy,
-        ingredient = emptyList(),
     )
 
 

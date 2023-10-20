@@ -21,9 +21,9 @@ interface LocalSource {
 
     suspend fun clearCache()
 
-    suspend fun getRecipeById(id: Int): RecipeDto?
+    suspend fun getRecipeById(id: Int): RecipeDto
 
     suspend fun getFavoriteRecipeById(id: Int): RecipeDto?
 
-    suspend fun filterRecipes(query: String): List<RecipeDto>?
+    suspend fun filterRecipes(query: String): List<RecipeDto>
 }

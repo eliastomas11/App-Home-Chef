@@ -10,6 +10,7 @@ interface RecipeRepository {
     suspend fun saveRecipes(recipe: Recipe): Long
     suspend fun getFavoriteRecipes(): List<Recipe>
     suspend fun createRecipe(recipeDto: RecipeDto): Long
-    suspend fun filterRecipes(query: String): List<Recipe>?
+    suspend fun filterRecipes(query: String): Set<Recipe>?
+    suspend fun clearCache()
 
 }

@@ -12,7 +12,7 @@ import com.example.chefgram.data.repository.local.db.recipewithingredient.Recipe
 interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun saveToFavorites(vararg favoriteRecipe: RecipeEntity)
+    fun saveToFavorites(favoriteRecipe: RecipeEntity): Long
 
     @Transaction
     @Query("SELECT * FROM recipe")

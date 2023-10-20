@@ -1,0 +1,49 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="notifications_category"
+        app:title="Notifications">
+
+        <SwitchPreferenceCompat
+            app:key="notifications"
+            app:icon="@drawable/notifications_icon"
+            app:title="Enable notifications"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="theme_category"
+        app:title="Theme">
+
+        <SwitchPreferenceCompat
+            app:key="theme"
+            app:icon="@drawable/mode_night"
+            app:title="Enable Night mode"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="privacy_category"
+        app:title="Privacy">
+
+        <Preference
+            app:key="privacy"
+            app:icon="@drawable/privacy_icon"
+
+            app:title="Privacy policy"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="about_category"
+        app:title="About">
+
+        <Preference
+            app:key="about"
+            app:icon="@drawable/about_icon"
+            app:title="About Us"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

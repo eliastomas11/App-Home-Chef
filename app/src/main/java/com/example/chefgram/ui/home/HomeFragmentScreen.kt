@@ -1,7 +1,6 @@
 package com.example.chefgram.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -46,26 +45,30 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     }
 
     private fun initObservers() {
+        viewModel.homeInit()
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingHomeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
-            Log.i("ERROR MESSAGE", errorMessage)
+        viewModel.mainError.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(requireContext(), error.toString(), Toast.LENGTH_SHORT).show()
         }
 
         viewModel.mealsList.observe(viewLifecycleOwner) { recipeList ->
             adapter.setData(recipeList)
             adapter.notifyDataSetChanged()
-
         }
 
+        viewModel.refreshing.observe(viewLifecycleOwner){
+            binding.swipeRefresh.isRefreshing = it
+        }
     }
 
     private fun initListeners() {
-
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.homeInit()
+        }
     }
 
 }

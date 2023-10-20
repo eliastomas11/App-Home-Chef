@@ -11,7 +11,7 @@ data class RecipeCacheEntity(
     @ColumnInfo(name = "id") @PrimaryKey val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "image") val image: String,
+    @ColumnInfo(name = "image") val image: String?,
     @ColumnInfo(name = "num_servings") val numServings: Int = 0,
     @ColumnInfo(name = "cook_time_minutes") val cookTimeMinutes: Int = 0,
     @ColumnInfo(name = "vegan_free") val veganFree: Boolean,

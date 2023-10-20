@@ -13,4 +13,5 @@ data class RecipeWithIngredient(
         entityColumn = "recipe_id",
     )
     val ingredientList: List<IngredientEntity>
+
 )

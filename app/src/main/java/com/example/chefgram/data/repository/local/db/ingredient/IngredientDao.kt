@@ -2,6 +2,7 @@ package com.example.chefgram.data.repository.local.db.ingredient
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -16,6 +17,6 @@ interface IngredientDao {
     @Query("DELETE FROM ingredient")
     fun clear()
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveIngredients(vararg ingredientList: IngredientEntity)
 }

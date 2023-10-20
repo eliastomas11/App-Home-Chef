@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chefgram.common.errorhandling.CustomErrors
+import com.example.chefgram.common.errorhandling.CustomException
 import com.example.chefgram.data.repository.RecipeRepository
-import com.example.chefgram.domain.model.FilterParams
 import com.example.chefgram.domain.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,27 +22,33 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
     private val _mealsList = MutableLiveData<List<Recipe>>()
     val mealsList: LiveData<List<Recipe>> get() = _mealsList
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> get() = _errorMessage
+    private val _mainError = MutableLiveData<CustomErrors>()
+    val mainError: LiveData<CustomErrors> get() = _mainError
 
     private val _recipeSelected = MutableLiveData<Recipe>()
     val recipeSelected: LiveData<Recipe> get() = _recipeSelected
 
-    private val _isSavedMessage = MutableLiveData<String>("")
-    val isSavedMessage: LiveData<String> get() = _isSavedMessage
+    private val _isSaved = MutableLiveData<Boolean>(false)
+    val isSaved: LiveData<Boolean> get() = _isSaved
 
+    private val _refreshing = MutableLiveData<Boolean>(false)
+    val refreshing: LiveData<Boolean> get() = _refreshing
 
     init {
-        fetchMeals()
+        viewModelScope.launch {
+            recipeRepository.clearCache()
+        }
     }
 
     private fun fetchMeals() {
         viewModelScope.launch {
             try {
                 _mealsList.value = recipeRepository.fetchRecipes()
-            } catch (e: Exception) {
+            } catch (e: CustomException) {
                 _mealsList.value = emptyList()
-                _errorMessage.value = e.message
+                _mainError.value = e.mapToCustomError()
+            } catch (e: Exception) {
+                _mainError.value = CustomErrors.GeneralError(e.message)
             }
             _loading.value = false
         }
@@ -51,32 +58,66 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
         _loading.value = true
         try {
             viewModelScope.launch {
-                _recipeSelected.value = recipeRepository.getRecipesById(id)
+                if (_recipeSelected.value?.id != id) {
+                    _recipeSelected.value = recipeRepository.getRecipesById(id)
+                }
+                _isSaved.value = false
             }
-        } catch (e: Exception) {
-            _errorMessage.value = e.message
+        } catch (e: CustomException) {
+            _mainError.value = e.mapToCustomError()
         }
         _loading.value = false
     }
 
-    fun saveMeal() {
+    fun saveRecipe() {
         viewModelScope.launch {
             try {
                 if (_recipeSelected.value?.isSaved == false) {
                     val saved = recipeRepository.saveRecipes(_recipeSelected.value!!)
                     _recipeSelected.value = _recipeSelected.value!!.copy(isSaved = saved > 0)
-                    _isSavedMessage.value = "Saved"
+                    _isSaved.value = true
                 } else {
-                    _isSavedMessage.value = "Already Saved"
+                    _isSaved.value = false
                 }
+
+            } catch (e: CustomException) {
+                _mainError.value = e.mapToCustomError()
             } catch (e: Exception) {
-                _errorMessage.value = e.message
+                _mainError.value = CustomErrors.GeneralError(e.localizedMessage)
             }
+
 
         }
     }
 
-    private fun filterExclsuive(filterIngredients: List<String>) {
+    fun filter(query: String?) {
+        try {
+            viewModelScope.launch {
+                if (query!!.isBlank()) {
+                    fetchMeals()
+                } else {
+                    _mealsList.value = recipeRepository.filterRecipes(query)?.toList()
+                }
+            }
+        } catch (e: CustomException) {
+            _mainError.value = e.mapToCustomError()
+        } catch (e: Exception) {
+            _mainError.value = CustomErrors.GeneralError(e.message)
+        }
+    }
+
+
+    fun favoriteInit() {
+        viewModelScope.launch {
+            _mealsList.value = recipeRepository.getFavoriteRecipes()
+            _loading.value = false
+            _refreshing.value = false
+        }
+
+    }
+
+
+    private fun filterExclusive(filterIngredients: List<String>) {
         val newRecipeList = mutableSetOf<Recipe>()
 
         _mealsList.value!!.forEach { recipe ->
@@ -103,27 +144,8 @@ class SharedViewModel @Inject constructor(private val recipeRepository: RecipeRe
 
     }
 
-    fun filterByIngredients(params: FilterParams) {
-        /*if (params.exclusive) {
-            filterExclsuive(params.ingredientList)
-        } else {
-            filterInclusive(params.ingredientList)
-        }*/
-
+    fun homeInit() {
+        fetchMeals()
+        _refreshing.value = false
     }
-
-
-    fun filter(query: String) {
-        viewModelScope.launch {
-            _mealsList.value = recipeRepository.filterRecipes(query)
-        }
-    }
-
-    fun getOriginalList() {
-        viewModelScope.launch {
-            _mealsList.value = recipeRepository.fetchRecipes()
-        }
-    }
-
-
 }

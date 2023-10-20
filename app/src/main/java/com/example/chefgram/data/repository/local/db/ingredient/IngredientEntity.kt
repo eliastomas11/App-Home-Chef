@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 import androidx.room.util.TableInfo
 import com.example.chefgram.data.repository.local.db.recipe.RecipeEntity
 
-@Entity(tableName = "ingredient", foreignKeys = [ForeignKey(entity = RecipeEntity::class, parentColumns = ["id"], childColumns = ["recipe_id"], onDelete = ForeignKey.CASCADE)])
+@Entity(tableName = "ingredient", primaryKeys = ["id", "recipe_id"], foreignKeys = [ForeignKey(entity = RecipeEntity::class, parentColumns = ["id"], childColumns = ["recipe_id"], onDelete = ForeignKey.CASCADE)])
 data class IngredientEntity(
-    @ColumnInfo(name = "id") @PrimaryKey val id: Int,
+    @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "original_name") val originalName: String,
     @ColumnInfo(name = "amount") val amount: Double,
