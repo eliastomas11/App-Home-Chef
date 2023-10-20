@@ -1,9 +1,11 @@
 package com.example.chefgram.common.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
-import com.example.chefgram.data.repository.RecipeRepository
-import com.example.chefgram.data.repository.RecipeRepositoryImpl
+import com.example.chefgram.R
+import com.example.chefgram.data.repository.reciperepo.RecipeRepository
+import com.example.chefgram.data.repository.reciperepo.RecipeRepositoryImpl
 import com.example.chefgram.data.repository.local.LocalDataSource
 import com.example.chefgram.data.repository.local.LocalSource
 import com.example.chefgram.data.repository.local.db.DatabaseLocal
@@ -13,6 +15,10 @@ import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCac
 import com.example.chefgram.data.repository.local.db.categories.CategoryDao
 import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
 import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
+import com.example.chefgram.data.repository.local.prefs.PreferencesRepository
+import com.example.chefgram.data.repository.local.prefs.PreferencesRepositoryImpl
+import com.example.chefgram.data.repository.local.prefs.PreferencesSource
+import com.example.chefgram.data.repository.local.prefs.PreferencesSourceImpl
 import com.example.chefgram.data.repository.remote.RecipeServiceApi
 import com.example.chefgram.data.repository.remote.RecipeInterceptor
 import com.example.chefgram.data.repository.remote.RemoteDataSource
@@ -27,7 +33,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -150,5 +155,21 @@ object AppModule {
         return RecipeRepositoryImpl(coroutineDispatcher, localDataSource, remoteDataSource)
     }
 
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences(context.getString(R.string.file_pref_key), Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesSource(@ApplicationContext context: Context,sharedPreferences: SharedPreferences): PreferencesSource {
+        return PreferencesSourceImpl(sharedPreferences, context)
+    }
+    @Provides
+    @Singleton
+    fun providePreferenceRepository(preferencesSource: PreferencesSource): PreferencesRepository {
+        return PreferencesRepositoryImpl(preferencesSource)
+    }
 
 }

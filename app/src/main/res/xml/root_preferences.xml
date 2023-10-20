@@ -7,6 +7,7 @@
 
         <SwitchPreferenceCompat
             app:key="notifications"
+            app:defaultValue="true"
             app:icon="@drawable/notifications_icon"
             app:title="Enable notifications"/>
 
@@ -28,9 +29,9 @@
         app:title="Privacy">
 
         <Preference
-            app:key="privacy"
+            app:key="@string/privacy_pref_key"
             app:icon="@drawable/privacy_icon"
-
+            app:fragment="com.example.chefgram.ui.preferences.PrivacyScreen"
             app:title="Privacy policy"/>
 
     </PreferenceCategory>
@@ -40,8 +41,10 @@
         app:title="About">
 
         <Preference
-            app:key="about"
+            app:key="@string/about_pref_key"
             app:icon="@drawable/about_icon"
+            app:fragment="com.example.chefgram.ui.preferences.AboutScreen"
+
             app:title="About Us"/>
 
     </PreferenceCategory>

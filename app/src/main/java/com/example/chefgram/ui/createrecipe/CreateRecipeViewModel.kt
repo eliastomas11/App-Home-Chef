@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.common.toRecipeDto
-import com.example.chefgram.data.repository.RecipeRepository
+import com.example.chefgram.data.repository.reciperepo.RecipeRepository
 import com.example.chefgram.domain.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

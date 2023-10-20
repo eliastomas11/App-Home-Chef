@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notifications_enabled_key">notifications</string>
+    <string name="theme_night_enabled_key">theme</string>
+    <string name="file_pref_key">com.example.myapp.HOME_CHEF</string>
+    <string name="privacy_pref_key">privacy</string>
+    <string name="about_pref_key">about</string>
+    <string name="unknown_error">Uknown error happened try again later</string>
+    <string name="time_out_error">Time Out waiting for response, refresh or try again later</string>
+    <string name="recipe_not_found_error">Recipe not found</string>
+    <string name="no_network_connection_error">No Network Connection try again later or connect to network</string>
+    <string name="general_error">Error Happened refresh or try again later</string>
+    <string name="network_error">Network Error Happened, Refresh or try again later</string>
+</resources>

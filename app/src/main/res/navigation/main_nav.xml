@@ -61,5 +61,27 @@
         <action
             android:id="@+id/action_settingsFragment_to_detailScreen"
             app:destination="@id/detailScreen" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutScreen"
+            app:destination="@id/aboutScreen" />
+        <action
+            android:id="@+id/action_settingsFragment_to_privacyScreen"
+            app:destination="@id/privacyScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutScreen"
+        android:name="com.example.chefgram.ui.preferences.AboutScreen"
+        android:label="AboutScreen" >
+        <action
+            android:id="@+id/action_aboutScreen_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacyScreen"
+        android:name="com.example.chefgram.ui.preferences.PrivacyScreen"
+        android:label="PrivacyScreen" >
+        <action
+            android:id="@+id/action_privacyScreen_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 </navigation>

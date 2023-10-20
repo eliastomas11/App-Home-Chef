@@ -1,4 +1,4 @@
-package com.example.chefgram.data.repository
+package com.example.chefgram.data.repository.reciperepo
 
 import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
 import com.example.chefgram.domain.model.Category

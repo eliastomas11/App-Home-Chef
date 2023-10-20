@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chefgram.R
+import com.example.chefgram.common.StringUtils
 import com.example.chefgram.databinding.HomeFragmentBinding
 import com.example.chefgram.ui.main.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,8 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
         }
 
         viewModel.mainError.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(requireContext(), error.toString(), Toast.LENGTH_SHORT).show()
+            //Show text view con image view triste
+            Toast.makeText(requireContext(), StringUtils.getErrorString(requireContext(),error), Toast.LENGTH_SHORT).show()
         }
 
         viewModel.mealsList.observe(viewLifecycleOwner) { recipeList ->

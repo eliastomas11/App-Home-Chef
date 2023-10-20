@@ -5,10 +5,12 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.chefgram.R
+import com.example.chefgram.common.StringUtils
 import com.example.chefgram.databinding.DetailScreenBinding
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
@@ -48,6 +50,9 @@ class DetailScreen : Fragment() {
             viewModel.saveRecipe()
         }
 
+        viewModel.mainError.observe(viewLifecycleOwner){
+            Toast.makeText(requireContext(),StringUtils.getErrorString(requireContext(),it),Toast.LENGTH_SHORT).show()
+        }
 
     }
 

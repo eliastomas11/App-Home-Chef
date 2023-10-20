@@ -4,9 +4,8 @@ package com.example.chefgram.common.errorhandling
 sealed class CustomErrors(val msg: String? = null) {
     data object NetworkError : CustomErrors()
     data object UnknownError : CustomErrors()
-    data class GeneralError(val message: String?) : CustomErrors()
+    data object GeneralError : CustomErrors()
     data object NoNetworkConnection : CustomErrors()
-    data class LocalDatabaseError(val message: String?) : CustomErrors()
     data object RecipeNotFound : CustomErrors()
     data object TimeOutError : CustomErrors()
 
@@ -21,11 +20,11 @@ sealed class CustomErrors(val msg: String? = null) {
     companion object {
         fun mapToResponseError(code: Int): CustomErrors {
             return when (code) {
-                401 -> ResponseError.Unauthorized()
-                403 -> ResponseError.Forbidden()
-                404 -> ResponseError.NotFound()
-                400 -> ResponseError.BadRequest()
-                500 -> ResponseError.InternalServerError()
+                401 -> ResponseError.Unauthorized("Unauthorized")
+                403 -> ResponseError.Forbidden("Forbidden")
+                404 -> ResponseError.NotFound("Not Found")
+                400 -> ResponseError.BadRequest("Bad Request")
+                500 -> ResponseError.InternalServerError("Internal Server Error")
                 else -> CustomErrors.NetworkError
             }
         }

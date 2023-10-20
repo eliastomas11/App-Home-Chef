@@ -1,4 +1,4 @@
-package com.example.chefgram.data.repository
+package com.example.chefgram.data.repository.reciperepo
 
 import android.util.Log
 import com.example.chefgram.common.errorhandling.CustomException
