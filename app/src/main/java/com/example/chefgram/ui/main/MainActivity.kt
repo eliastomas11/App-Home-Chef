@@ -1,5 +1,6 @@
 package com.example.chefgram.ui.main
 
+import android.app.ActionBar.LayoutParams
 import android.app.UiModeManager
 import android.content.pm.PackageManager
 import android.os.Build
@@ -10,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<SharedViewModel>()
     private val navController by lazy { navHostFragment.navController }
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.screen_fragment_container) as NavHostFragment }
+
     @Inject
     lateinit var userPrefs: PreferencesRepository
     private val requestPermissionLauncher =
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         viewModel.loading.observe(this) {
-            splashScreen.setKeepOnScreenCondition{
+            splashScreen.setKeepOnScreenCondition {
                 it
             }
         }
@@ -57,10 +60,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initSplash(){
+    private fun initSplash() {
         val splashScreen = installSplashScreen()
         viewModel.loading.observe(this) {
-            splashScreen.setKeepOnScreenCondition{
+            splashScreen.setKeepOnScreenCondition {
                 it
             }
         }
@@ -73,6 +76,21 @@ class MainActivity : AppCompatActivity() {
         }
         initNavigation()
         binding.toolbar.navigationIcon?.setVisible(false, false)
+
+        binding.searchBar.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                binding.searchBar.layoutParams.width = LayoutParams.WRAP_CONTENT
+                binding.appBarTitleLogo.visibility = View.VISIBLE
+                binding.searchBar.isActivated = false
+                return false
+            }
+
+        } )
+
+        binding.searchBar.setOnSearchClickListener {
+            binding.appBarTitleLogo.visibility = View.GONE
+            it.layoutParams.width = LayoutParams.MATCH_PARENT
+        }
         binding.searchBar.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
