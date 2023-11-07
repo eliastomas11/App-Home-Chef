@@ -1,30 +1,26 @@
 package com.example.chefgram.ui.main
 
 import android.app.ActionBar.LayoutParams
-import android.app.UiModeManager
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chefgram.R
-import com.example.chefgram.data.repository.local.prefs.PreferencesRepository
 import com.example.chefgram.databinding.ActivityMainBinding
+import com.example.chefgram.ui.main.adapters.FilterAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -34,14 +30,13 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy { navHostFragment.navController }
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.screen_fragment_container) as NavHostFragment }
 
-    @Inject
-    lateinit var userPrefs: PreferencesRepository
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                viewModel.notificationPermissionGranted()
+                viewModel.notificationPermissionGranted(isGranted)
             } else {
-
+                Toast.makeText(this, "Permission Needed to show notifications", Toast.LENGTH_SHORT).show()
+                viewModel.notificationPermissionGranted(isGranted)
             }
         }
 
@@ -70,45 +65,63 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-
-        lifecycleScope.launch {
-            changeTheme(userPrefs.getThemePref() ?: true)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            requestPermissions()
         }
         initNavigation()
+        initFilterBar()
+        initSearchBar()
+        initObservers()
         binding.toolbar.navigationIcon?.setVisible(false, false)
 
-        binding.searchBar.setOnCloseListener(object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                binding.searchBar.layoutParams.width = LayoutParams.WRAP_CONTENT
-                binding.appBarTitleLogo.visibility = View.VISIBLE
-                binding.searchBar.isActivated = false
-                return false
-            }
 
-        } )
-
-        binding.searchBar.setOnSearchClickListener {
-            binding.appBarTitleLogo.visibility = View.GONE
-            it.layoutParams.width = LayoutParams.MATCH_PARENT
-        }
-        binding.searchBar.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    viewModel.filter(it)
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                newText.let {
-                    viewModel.filter(newText)
-                }
-                return true
-            }
-
-        })
     }
+
+    private fun initObservers() {
+
+    }
+
+    private fun initSearchBar() {
+        binding.searchBar.setOnCloseListener {
+            binding.searchBar.layoutParams.width = LayoutParams.WRAP_CONTENT
+            binding.appBarTitleLogo.visibility = View.VISIBLE
+            binding.searchBar.isActivated = false
+            false
+        }
+
+        binding.searchBar.setOnSearchClickListener { v ->
+            binding.searchBar.setOnQueryTextListener(object :
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        viewModel.filter(it)
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    newText.let {
+                        viewModel.filter(newText)
+                    }
+                    return true
+                }
+
+            })
+            binding.appBarTitleLogo.visibility = View.GONE
+            v.layoutParams.width = LayoutParams.MATCH_PARENT
+        }
+
+    }
+
+    private fun initFilterBar() {
+        binding.filterList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        viewModel.filterList.observe(this) {
+            binding.filterList.adapter = FilterAdapter(it){ filterItem ->
+                viewModel.onCategoryClick(filterItem)
+            }
+        }
+    }
+
 
     private fun initNavigation() {
         binding.btmNavigation.setupWithNavController(navController)
@@ -116,13 +129,19 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> navigateToHome()
                 R.id.settingsFragment -> navigateToSettings()
+                R.id.detailScreen -> navigateToDetail()
             }
         }
+    }
+
+    private fun navigateToDetail() {
+        navigateToSettings()
     }
 
     private fun navigateToHome() {
         binding.toolbar.navigationIcon = null
         binding.searchBar.visibility = View.VISIBLE
+        binding.filterBar.visibility = View.VISIBLE
         binding.appBtmBar.performShow()
     }
 
@@ -135,25 +154,10 @@ class MainActivity : AppCompatActivity() {
                 navController.navigateUp()
             }
         }
+        binding.filterBar.visibility = View.GONE
     }
 
-    private fun changeTheme(isNight: Boolean) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-            if (isNight) {
-                UiModeManager.MODE_NIGHT_NO
 
-            } else {
-                UiModeManager.MODE_NIGHT_YES
-            }
-        } else {
-            if (isNight) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestPermissions() {
@@ -161,7 +165,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(
                 this, android.Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED -> {
-
+                viewModel.notificationPermissionGranted(true)
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(

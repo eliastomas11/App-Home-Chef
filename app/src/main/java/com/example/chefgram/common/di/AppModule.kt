@@ -1,29 +1,28 @@
 package com.example.chefgram.common.di
 
+
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.chefgram.R
-import com.example.chefgram.data.repository.reciperepo.RecipeRepository
-import com.example.chefgram.data.repository.reciperepo.RecipeRepositoryImpl
-import com.example.chefgram.data.repository.local.LocalDataSource
-import com.example.chefgram.data.repository.local.LocalSource
-import com.example.chefgram.data.repository.local.db.DatabaseLocal
-import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheDao
-import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredientDao
-import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheDao
-import com.example.chefgram.data.repository.local.db.categories.CategoryDao
-import com.example.chefgram.data.repository.local.db.ingredient.IngredientDao
-import com.example.chefgram.data.repository.local.db.recipe.RecipeDao
-import com.example.chefgram.data.repository.local.prefs.PreferencesRepository
-import com.example.chefgram.data.repository.local.prefs.PreferencesRepositoryImpl
-import com.example.chefgram.data.repository.local.prefs.PreferencesSource
-import com.example.chefgram.data.repository.local.prefs.PreferencesSourceImpl
 import com.example.chefgram.data.repository.notifications.RecipeNotificationService
 import com.example.chefgram.data.repository.notifications.RecipeNotificationServiceImpl
-import com.example.chefgram.data.repository.remote.RecipeServiceApi
-import com.example.chefgram.data.repository.remote.RecipeInterceptor
-import com.example.chefgram.data.repository.remote.RemoteDataSource
+import com.example.chefgram.data.repository.reciperepo.recipe.RecipeRepository
+import com.example.chefgram.data.repository.reciperepo.recipe.RecipeRepositoryImpl
+import com.example.chefgram.data.repository.reciperepo.recipe.local.LocalDataSource
+import com.example.chefgram.data.repository.reciperepo.recipe.local.LocalSource
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.DatabaseLocal
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.cache.ingredientcache.IngredientCacheDao
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.cache.recipecache.RecipeCacheDao
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.ingredient.IngredientDao
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.recipe.RecipeDao
+import com.example.chefgram.data.repository.reciperepo.recipe.local.prefs.PreferencesRepository
+import com.example.chefgram.data.repository.reciperepo.recipe.local.prefs.PreferencesRepositoryImpl
+import com.example.chefgram.data.repository.reciperepo.recipe.local.prefs.PreferencesSource
+import com.example.chefgram.data.repository.reciperepo.recipe.local.prefs.PreferencesSourceImpl
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.RecipeInterceptor
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.RecipeServiceApi
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -109,18 +108,6 @@ object AppModule {
         return db.ingredientCacheDao()
     }
 
-    @Provides
-    @Singleton
-    fun provideFilterIngredientDao(db: DatabaseLocal): FilterIngredientDao {
-        return db.filterIngredientDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideCategoryDao(db: DatabaseLocal): CategoryDao {
-        return db.categoryDao()
-    }
-
 
     @Provides
     @Singleton
@@ -129,10 +116,8 @@ object AppModule {
         recipeCacheDAO: RecipeCacheDao,
         ingredientCacheDao: IngredientCacheDao,
         ingredientDao: IngredientDao,
-        filterIngredientDao: FilterIngredientDao,
-        categoryDao: CategoryDao
     ): LocalSource {
-        return LocalDataSource(recipeDao, recipeCacheDAO, ingredientCacheDao, ingredientDao,filterIngredientDao,categoryDao)
+        return LocalDataSource(recipeDao, recipeCacheDAO, ingredientCacheDao, ingredientDao)
     }
 
     @Provides

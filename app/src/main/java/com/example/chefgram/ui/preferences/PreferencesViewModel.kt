@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chefgram.common.errorhandling.CustomErrors
-import com.example.chefgram.data.repository.local.prefs.PreferencesRepository
+import com.example.chefgram.data.repository.reciperepo.recipe.local.prefs.PreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

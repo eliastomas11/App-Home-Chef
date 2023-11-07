@@ -2,13 +2,11 @@ package com.example.chefgram.ui.favorite
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chefgram.R
-import com.example.chefgram.common.StringUtils
 import com.example.chefgram.databinding.FragmentFavoriteScreenBinding
 import com.example.chefgram.ui.main.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +32,7 @@ class FavoriteScreen : Fragment(R.layout.fragment_favorite_screen) {
 
     private fun initObservers() {
         viewModel.favoriteInit()
-        viewModel.mealsList.observe(viewLifecycleOwner) {
+        viewModel.recipeList.observe(viewLifecycleOwner) {
             favoriteAdapter.setData(it)
             favoriteAdapter.notifyDataSetChanged()
         }
@@ -47,13 +45,6 @@ class FavoriteScreen : Fragment(R.layout.fragment_favorite_screen) {
             binding.favoriteSwipeRefresh.isRefreshing = it
         }
 
-        viewModel.mainError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                requireContext(),
-                StringUtils.getErrorString(requireContext(), it),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     private fun initUI() {

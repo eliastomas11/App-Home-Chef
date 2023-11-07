@@ -40,10 +40,16 @@
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/pale</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon_splash_version</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.Chefgram</item>
     </style>
 
-
+    <style name="Theme.Filter.Chip" parent="Base.Theme.Chefgram">
+        <item name="chipBackgroundColor">@color/chip_filter</item>
+        <item name="chipStrokeColor">@color/md_theme_dark_primary</item>
+        <item name="chipCornerRadius">16dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="chipStrokeWidth">2dp</item>
+    </style>
 </resources>

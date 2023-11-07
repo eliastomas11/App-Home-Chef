@@ -26,6 +26,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = HomeFragmentBinding.bind(view)
+        viewModel.homeInit()
         initUI()
 
     }
@@ -46,7 +47,6 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
     }
 
     private fun initObservers() {
-        viewModel.homeInit()
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingHomeProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 
@@ -57,7 +57,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
             Toast.makeText(requireContext(), StringUtils.getErrorString(requireContext(),error), Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.mealsList.observe(viewLifecycleOwner) { recipeList ->
+        viewModel.recipeList.observe(viewLifecycleOwner) { recipeList ->
             adapter.setData(recipeList)
             adapter.notifyDataSetChanged()
         }
@@ -69,7 +69,7 @@ class HomeFragmentScreen : Fragment(R.layout.home_fragment) {
 
     private fun initListeners() {
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.homeInit()
+            viewModel.loadMoreRecipes()
         }
     }
 

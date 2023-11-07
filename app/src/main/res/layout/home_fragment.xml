@@ -4,13 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.airbnb.lottie.LottieAnimationView
+    <ProgressBar
         android:id="@+id/loading_home_progress_bar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/anim2"
-        app:lottie_repeatMode="reverse"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

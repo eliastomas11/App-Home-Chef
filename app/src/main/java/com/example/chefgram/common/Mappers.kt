@@ -1,20 +1,19 @@
 package com.example.chefgram.common
 
-import com.example.chefgram.data.repository.local.db.cache.ingredientcache.IngredientCacheEntity
-import com.example.chefgram.data.repository.local.db.cache.recipecache.RecipeCacheEntity
-import com.example.chefgram.data.repository.local.db.cache.recipewithingredientcache.RecipeWithIngredientCache
-import com.example.chefgram.data.repository.local.db.categories.CategoryEntity
-import com.example.chefgram.data.repository.local.db.filteringredient.FilterIngredient
-import com.example.chefgram.data.repository.local.db.ingredient.IngredientEntity
-import com.example.chefgram.data.repository.local.db.recipe.RecipeEntity
-import com.example.chefgram.data.repository.local.db.recipewithingredient.RecipeWithIngredient
-import com.example.chefgram.data.repository.remote.recipemodel.CategoryDto
-import com.example.chefgram.data.repository.remote.recipemodel.IngredientDto
-import com.example.chefgram.data.repository.remote.recipemodel.RecipeDto
-import com.example.chefgram.data.repository.remote.recipemodel.RecipeResponseDto
-import com.example.chefgram.domain.model.IngredientFilterItem
+
+import com.example.chefgram.data.repository.reciperepo.category.Categories
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.cache.ingredientcache.IngredientCacheEntity
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.cache.recipecache.RecipeCacheEntity
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.cache.recipewithingredientcache.RecipeWithIngredientCache
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.ingredient.IngredientEntity
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.recipe.RecipeEntity
+import com.example.chefgram.data.repository.reciperepo.recipe.local.db.recipewithingredient.RecipeWithIngredient
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.recipemodel.IngredientDto
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.recipemodel.RecipeDto
+import com.example.chefgram.data.repository.reciperepo.recipe.remote.recipemodel.RecipeResponseDto
 import com.example.chefgram.domain.model.Recipe
 import com.example.chefgram.domain.model.RecipeIngredient
+import com.example.chefgram.ui.main.adapters.FilterItem
 
 fun RecipeResponseDto.toRecipeDto(): RecipeDto =
     RecipeDto(
@@ -192,11 +191,7 @@ fun RecipeDto.toRecipeCache(): RecipeCacheEntity =
     )
 
 
-fun FilterIngredient.toIngredientFilterItem(): IngredientFilterItem =
-    IngredientFilterItem(name = this.name, id = this.id)
 
-fun CategoryEntity.toCategoryDto(): CategoryDto =
-    CategoryDto(name = this.name)
-
-
+fun Categories.toFilterItem(): FilterItem =
+    FilterItem(category = this)
 

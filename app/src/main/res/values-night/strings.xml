@@ -16,7 +16,6 @@
     <string name="notification_channel_name">RecipeNotificationChannel</string>
     <string name="notification_channel_id">RecipeNotification</string>
     <string name="channel_description">Notification channel for sending notifications to the user</string>
-    <string name="notification_id_reminder">reminderToCook</string>
     <string name="notification_permission_rationale">Permission Requiered to show notifications and reminders</string>
     <string name="api_key">\"API_KEY\"</string>
     <string name="logo_title_of_the_app_image_description">Logo title of the app</string>

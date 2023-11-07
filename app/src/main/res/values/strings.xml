@@ -4,9 +4,7 @@
 
     <string name="date_update" type="string">10/20/2023</string>
 
-    <string name="privacy_policy">
-        Privacy Policy for TheHomeChef
-
+    <string name="privacy_policy"><![CDATA[
         This Privacy Policy describes how TheHomeChef collects, uses, and shares information about you when you use our mobile application and related services (the "Service").
 
         Information We Collect
@@ -48,11 +46,9 @@
         If you have any questions or concerns about this Privacy Policy, please contact us at eliastomasguerra@gmail.com
 
         This Privacy Policy was last updated on %s.
-   </string>
+   ]]></string>
 
     <string name="about_us"><![CDATA[
-        About Us
-
         Welcome to TheHomeChef, your go-to app for discovering and creating delicious recipes from around the world.
 
         Our Mission

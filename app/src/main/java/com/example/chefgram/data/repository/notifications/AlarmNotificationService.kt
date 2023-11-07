@@ -7,7 +7,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AlarmNotificationService @Inject constructor(private val recipeNotificationServiceImpl: RecipeNotificationServiceImpl) : BroadcastReceiver(){
+class AlarmNotificationService @Inject constructor() : BroadcastReceiver(){
+
+    @Inject lateinit var recipeNotificationServiceImpl: RecipeNotificationService
     override fun onReceive(context: Context?, intent: Intent?) {
         recipeNotificationServiceImpl.createNotification(context!!)
     }
