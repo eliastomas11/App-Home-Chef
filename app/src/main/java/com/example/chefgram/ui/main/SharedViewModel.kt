@@ -211,6 +211,7 @@ class SharedViewModel @Inject constructor(
             fetchMeals()
         } catch (e: Exception) {
             _mainError.value = CustomErrors.GeneralError
+            _recipeList.value = emptyList()
         }
     }
 
