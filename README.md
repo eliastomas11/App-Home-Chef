@@ -42,7 +42,7 @@ The Home Chef App is a user-friendly Android application designed to help users 
 - Design - Material
 - JSON Parsing - Gson
 - Alarm Manager
-
+- Navigation Component
 
 
 ## Authors
