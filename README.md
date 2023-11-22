@@ -18,13 +18,13 @@ The Home Chef App is a user-friendly Android application designed to help users 
 - Set up notifications to remind yourself to cook something delicious at specific times.
 
 
-## Usage/Examples
+## 🎥 Demo
 
 ![Demo](https://i.imgur.com/NxVbXVE.gif)
 
 
 
-## Tech Stack
+## 🛠 Tech Stack
 
 - Android Studio
 - Gradle
